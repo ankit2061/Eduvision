@@ -19,7 +19,7 @@ from app.models.schemas import (
     LessonSummary,
     LessonUpdateRequest,
 )
-from app.services import gemini, elevenlabs, snowflake_db, storage, huggingface
+from app.services import gemini, elevenlabs, snowflake_db, storage, offline_whisper
 from app.utils.audio import detect_mime_type
 
 router = APIRouter(prefix="/lesson", tags=["Lesson"])
@@ -41,7 +41,7 @@ async def transcribe_audio_endpoint(
     mime_type = detect_mime_type(audio.filename or "audio.webm", audio_bytes)
 
     try:
-        transcript = await huggingface.transcribe_audio(audio_bytes)
+        transcript = await offline_whisper.transcribe_audio(audio_bytes)
         return {"transcript": transcript}
     except Exception as e:
         logger.error(f"[Lesson] Transcription failed: {e}")
