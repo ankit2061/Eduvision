@@ -82,3 +82,43 @@ async def aac_speak(text: str, voice_id: str | None = None) -> bytes:
     vid = voice_id or settings.elevenlabs_aac_voice_id
     logger.info(f"[ElevenLabs] AAC speak: voice={vid}, text={text[:60]}")
     return await _tts_request(text, vid, _CALM_VOICE_SETTINGS)
+
+
+async def stt(audio_bytes: bytes, mime_type: str = "audio/webm") -> str:
+    """
+    Transcribes audio using ElevenLabs Speech-to-Text (Scribe API).
+    """
+    logger.info(f"[ElevenLabs] Transcribing audio ({len(audio_bytes)} bytes, {mime_type})")
+    url = f"{_BASE_URL}/speech-to-text"
+    
+    # map common mime types to standard filename extensions, ElevenLabs requires a recognizable extension or valid mime
+    extension = mime_type.split("/")[-1] if "/" in mime_type else "webm"
+    if "webm" in mime_type:
+        extension = "webm"
+    elif "wav" in mime_type:
+        extension = "wav"
+    elif "mpeg" in mime_type or "mp3" in mime_type:
+        extension = "mp3"
+        
+    filename = f"audio.{extension}"
+
+    files = {
+        "file": (filename, audio_bytes, mime_type)
+    }
+    data = {
+        "model_id": "scribe_v1" # v1 is usually used as default, sometimes it is scribe_v2 but we can just omit or use scribe_v1 for testing. Or use "scribe_v1"
+    }
+
+    async with httpx.AsyncClient(timeout=120.0) as client:
+        # We need another set of headers without Content-Type because httpx sets it automatically with the boundary for multipart forms
+        stt_headers = {
+            "xi-api-key": settings.elevenlabs_api_key,
+        }
+        resp = await client.post(url, headers=stt_headers, files=files, data=data)
+        if resp.status_code != 200:
+            logger.error(f"[ElevenLabs] STT error {resp.status_code}: {resp.text[:200]}")
+            resp.raise_for_status()
+        result = resp.json()
+        transcript = result.get("text", "").strip()
+        logger.info(f"[ElevenLabs] Transcript: {transcript[:100]}...")
+        return transcript

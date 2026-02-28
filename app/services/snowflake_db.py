@@ -66,11 +66,13 @@ async def upsert_user(
     disability_type: Optional[str] = None,
     learning_style: Optional[str] = None,
     onboarding_complete: bool = False,
+    name: Optional[str] = None,
+    email: Optional[str] = None,
 ):
     profile_json = json.dumps(accessibility_profile or {})
     sql = """
         MERGE INTO users AS target
-        USING (SELECT %s AS user_id, %s AS role, %s AS school_id, PARSE_JSON(%s) AS accessibility_profile_json, %s AS sub_role, %s AS disability_type, %s AS learning_style, %s AS onboarding_complete) AS src
+        USING (SELECT %s AS user_id, %s AS role, %s AS school_id, PARSE_JSON(%s) AS accessibility_profile_json, %s AS sub_role, %s AS disability_type, %s AS learning_style, %s AS onboarding_complete, %s AS name, %s AS email) AS src
         ON target.user_id = src.user_id
         WHEN MATCHED THEN UPDATE SET
             role = src.role,
@@ -79,17 +81,19 @@ async def upsert_user(
             sub_role = src.sub_role,
             disability_type = src.disability_type,
             learning_style = src.learning_style,
-            onboarding_complete = src.onboarding_complete
-        WHEN NOT MATCHED THEN INSERT (user_id, role, school_id, accessibility_profile_json, sub_role, disability_type, learning_style, onboarding_complete, created_at)
-            VALUES (src.user_id, src.role, src.school_id, src.accessibility_profile_json, src.sub_role, src.disability_type, src.learning_style, src.onboarding_complete, CURRENT_TIMESTAMP)
+            onboarding_complete = src.onboarding_complete,
+            name = src.name,
+            email = src.email
+        WHEN NOT MATCHED THEN INSERT (user_id, role, school_id, accessibility_profile_json, sub_role, disability_type, learning_style, onboarding_complete, name, email, created_at)
+            VALUES (src.user_id, src.role, src.school_id, src.accessibility_profile_json, src.sub_role, src.disability_type, src.learning_style, src.onboarding_complete, src.name, src.email, CURRENT_TIMESTAMP)
     """
-    await execute(sql, (user_id, role, school_id, profile_json, sub_role, disability_type, learning_style, onboarding_complete))
+    await execute(sql, (user_id, role, school_id, profile_json, sub_role, disability_type, learning_style, onboarding_complete, name, email))
     logger.info(f"[Snowflake] upsert_user: {user_id}")
 
 
 async def get_user(user_id: str) -> Optional[dict]:
     rows = await execute(
-        "SELECT user_id, role, school_id, accessibility_profile_json, sub_role, disability_type, learning_style, onboarding_complete FROM users WHERE user_id = %s",
+        "SELECT user_id, role, school_id, accessibility_profile_json, sub_role, disability_type, learning_style, onboarding_complete, name, email FROM users WHERE user_id = %s",
         (user_id,),
         fetch=True,
     )
@@ -100,8 +104,12 @@ async def get_user(user_id: str) -> Optional[dict]:
         "user_id": r[0], "role": r[1], "school_id": r[2], 
         "accessibility_profile_json": r[3], "sub_role": r[4], 
         "disability_type": r[5], "learning_style": r[6], 
-        "onboarding_complete": bool(r[7]) if r[7] is not None else False
+        "onboarding_complete": bool(r[7]) if r[7] is not None else False,
+        "name": r[8], "email": r[9]
     }
+async def delete_user(user_id: str):
+    await execute("DELETE FROM users WHERE user_id = %s", (user_id,))
+    logger.info(f"[Snowflake] delete_user: {user_id}")
 
 async def complete_onboarding(user_id: str, sub_role: str, disability_type: Optional[str], learning_style: Optional[str], accessibility_profile: Optional[dict]):
     profile_json = json.dumps(accessibility_profile or {})
@@ -119,7 +127,7 @@ async def complete_onboarding(user_id: str, sub_role: str, disability_type: Opti
 
 async def list_students_by_school(school_id: str) -> list:
     rows = await execute(
-        "SELECT user_id, role, sub_role, disability_type, learning_style, onboarding_complete, accessibility_profile_json FROM users WHERE school_id = %s",
+        "SELECT user_id, role, sub_role, disability_type, learning_style, onboarding_complete, accessibility_profile_json, name, email FROM users WHERE school_id = %s",
         (school_id,),
         fetch=True,
     )
@@ -128,7 +136,7 @@ async def list_students_by_school(school_id: str) -> list:
            "user_id": r[0], "role": r[1], "sub_role": r[2],
            "disability_type": r[3], "learning_style": r[4],
            "onboarding_complete": bool(r[5]) if r[5] is not None else False,
-           "accessibility_profile_json": r[6]
+           "accessibility_profile_json": r[6], "name": r[7], "email": r[8]
        } for r in (rows or [])
     ]
 
@@ -185,6 +193,49 @@ async def list_lessons_by_teacher(teacher_id: str) -> list:
     )
     return [
         {"lesson_id": r[0], "topic": r[1], "grade": r[2], "tiers": r[3], "created_at": str(r[4])}
+        for r in (rows or [])
+    ]
+
+
+# ─── Assignments ────────────────────────────────────────────────────────────
+
+async def create_assignment(
+    assignment_id: str,
+    lesson_id: str,
+    teacher_id: str,
+    assigned_to: str,
+    due_date: Optional[str] = None
+) -> str:
+    sql = """
+        INSERT INTO assignments (assignment_id, lesson_id, teacher_id, assigned_to, due_date, status, created_at)
+        VALUES (%s, %s, %s, %s, %s, 'pending', CURRENT_TIMESTAMP)
+    """
+    await execute(sql, (assignment_id, lesson_id, teacher_id, assigned_to, due_date))
+    logger.info(f"[Snowflake] create_assignment: {assignment_id}")
+    return assignment_id
+
+
+async def get_student_assignments(assigned_to: str) -> list:
+    sql = """
+        SELECT a.assignment_id, a.lesson_id, a.teacher_id, a.assigned_to, a.due_date, a.status, a.created_at, l.topic, l.grade
+        FROM assignments a
+        JOIN lessons l ON a.lesson_id = l.lesson_id
+        WHERE a.assigned_to = %s OR a.assigned_to = 'class'
+        ORDER BY a.created_at DESC
+    """
+    rows = await execute(sql, (assigned_to,), fetch=True)
+    return [
+        {
+            "assignment_id": r[0],
+            "lesson_id": r[1],
+            "teacher_id": r[2],
+            "assigned_to": r[3],
+            "due_date": r[4],
+            "status": r[5],
+            "created_at": str(r[6]),
+            "topic": r[7],
+            "grade": r[8]
+        }
         for r in (rows or [])
     ]
 
@@ -313,18 +364,22 @@ async def get_student_progress(teacher_id: str, class_id: Optional[str] = None) 
     rows = await execute(
         """
         SELECT
-            ps.student_id,
+            u.user_id AS student_id,
             COUNT(ps.session_id) AS session_count,
             AVG(pa.scores_json:fluency::FLOAT) AS avg_fluency,
             AVG(pa.scores_json:grammar::FLOAT) AS avg_grammar,
             AVG(pa.scores_json:confidence::FLOAT) AS avg_confidence,
-            MAX(ps.started_at) AS last_active
-        FROM practice_sessions ps
-        JOIN practice_artifacts pa ON ps.session_id = pa.session_id
-        JOIN lessons l ON ps.lesson_id = l.lesson_id
-        WHERE l.teacher_id = %s
-        GROUP BY ps.student_id
-        ORDER BY last_active DESC
+            MAX(ps.started_at) AS last_active,
+            u.disability_type,
+            u.learning_style,
+            u.name
+        FROM users u
+        LEFT JOIN practice_sessions ps ON u.user_id = ps.student_id
+        LEFT JOIN practice_artifacts pa ON ps.session_id = pa.session_id
+        LEFT JOIN lessons l ON ps.lesson_id = l.lesson_id AND l.teacher_id = %s
+        WHERE u.role = 'student'
+        GROUP BY u.user_id, u.disability_type, u.learning_style, u.name
+        ORDER BY last_active DESC NULLS LAST
         """,
         (teacher_id,),
         fetch=True,
@@ -332,13 +387,13 @@ async def get_student_progress(teacher_id: str, class_id: Optional[str] = None) 
     return [
         {
             "student_id": r[0],
-            "name": None,
+            "name": r[8],
             "session_count": int(r[1] or 0),
             "avg_fluency": round(float(r[2]), 2) if r[2] else None,
             "avg_grammar": round(float(r[3]), 2) if r[3] else None,
             "avg_confidence": round(float(r[4]), 2) if r[4] else None,
             "last_active": str(r[5]) if r[5] else None,
-            "accessibility_modes_used": [],
+            "accessibility_modes_used": [r[6] or r[7] or "general"],
         }
         for r in (rows or [])
     ]

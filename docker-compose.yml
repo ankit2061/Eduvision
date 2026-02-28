@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  eduvision_db:
+    image: postgres:15-alpine
+    container_name: eduvision_postgres
+    environment:
+      POSTGRES_USER: edu_user
+      POSTGRES_PASSWORD: edu_password
+      POSTGRES_DB: eduvision
+    ports:
+      - "5432:5432"
+    volumes:
+      - eduvision_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  eduvision_pgdata:

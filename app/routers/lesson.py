@@ -19,7 +19,7 @@ from app.models.schemas import (
     LessonSummary,
     LessonUpdateRequest,
 )
-from app.services import gemini, elevenlabs, snowflake_db, storage, offline_whisper
+from app.services import gemini, elevenlabs, snowflake_db, storage, learning_pathway
 from app.utils.audio import detect_mime_type
 
 router = APIRouter(prefix="/lesson", tags=["Lesson"])
@@ -41,7 +41,7 @@ async def transcribe_audio_endpoint(
     mime_type = detect_mime_type(audio.filename or "audio.webm", audio_bytes)
 
     try:
-        transcript = await offline_whisper.transcribe_audio(audio_bytes)
+        transcript = await elevenlabs.stt(audio_bytes, mime_type)
         return {"transcript": transcript}
     except Exception as e:
         logger.error(f"[Lesson] Transcription failed: {e}")
@@ -59,17 +59,30 @@ async def generate_lesson(
     """
     lesson_id = str(uuid.uuid4())
 
-    # 1. Generate tiered content via Gemini
+    # 1. Generate tiered content via LangGraph (Learning Style Specific)
     try:
-        gemini_response = await gemini.generate_lesson(
-            topic=req.topic,
-            grade=req.grade,
-            tiers=req.tiers,
-            language=req.language,
-            base_text=req.base_text,
-        )
+        # Use LangGraph workflow if learning_style is provided, fallback to standard Gemini
+        if req.learning_style and req.learning_style != "none":
+            logger.info(f"[Lesson] Using LangGraph for style: {req.learning_style}")
+            gemini_response = await learning_pathway.generate_styled_lesson(
+                topic=req.topic,
+                grade=req.grade,
+                tiers=req.tiers,
+                language=req.language,
+                learning_style=req.learning_style,
+                base_text=req.base_text,
+            )
+        else:
+            logger.info("[Lesson] Using standard Gemini generation")
+            gemini_response = await gemini.generate_lesson(
+                topic=req.topic,
+                grade=req.grade,
+                tiers=req.tiers,
+                language=req.language,
+                base_text=req.base_text,
+            )
     except Exception as e:
-        logger.error(f"[Lesson] Gemini error: {e}")
+        logger.error(f"[Lesson] Generation failed: {e}")
         raise HTTPException(status_code=502, detail=f"Content generation failed: {e}")
 
     raw_tiers = gemini_response.get("tiers", [])
@@ -135,6 +148,15 @@ async def list_library(user: CurrentUser = Depends(require_role("teacher", "admi
     return [LessonSummary(**l) for l in lessons]
 
 
+@router.get("/student-assignments")
+async def get_student_assignments(
+    user: CurrentUser = Depends(get_current_user),
+):
+    """Fetch assignments for the current student."""
+    assignments = await snowflake_db.get_student_assignments(user.user_id if user.role == 'student' else user.name)
+    return assignments
+
+
 @router.get("/{lesson_id}")
 async def get_lesson(
     lesson_id: str,
@@ -168,7 +190,6 @@ async def assign_lesson(
 ):
     """
     Assign a lesson to a class. Records assignment metadata.
-    (Extend with an `assignments` table for full production use.)
     """
     lesson = await snowflake_db.get_lesson(lesson_id)
     if not lesson:
@@ -185,9 +206,20 @@ async def assign_lesson(
             "mode": req.mode,
         },
     )
+    
+    # Store directly in Snowflake database
+    assignment_id = str(uuid.uuid4())
+    await snowflake_db.create_assignment(
+        assignment_id=assignment_id,
+        lesson_id=lesson_id,
+        teacher_id=user.user_id,
+        assigned_to=req.class_id,
+        due_date=req.due_date,
+    )
 
     return {
         "status": "assigned",
+        "assignment_id": assignment_id,
         "lesson_id": lesson_id,
         "class_id": req.class_id,
         "due_date": req.due_date,

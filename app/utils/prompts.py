@@ -48,6 +48,36 @@ Rules:
 
 BASE_TEXT_TEMPLATE = "- Base Text to adapt: ```{base_text}```"
 
+# ─── LEARNING STYLE ADDENDUMS ───
+
+VISUAL_STYLE_ADDENDUM = """
+LEARNING STYLE: VISUAL
+- Emphasize spatial relationships and visual metaphors.
+- Use descriptive language that helps the student form mental images.
+- Provide a 'Visual Guide' section in the passage describing what a diagram of this topic would look like.
+- Format key terms with clear visual markers or lists."""
+
+AUDITORY_STYLE_ADDENDUM = """
+LEARNING STYLE: AUDITORY
+- Use rhythmic language and alliteration where appropriate to make the text 'catchy'.
+- Include a 'Mnemonic Corner' with a rhyme or acronym to help remember key facts.
+- Frame parts of the passage as a dialogue or a script for a podcast/radio segment.
+- Suggest 'Read Aloud' cues for specific impactful sentences."""
+
+KINESTHETIC_STYLE_ADDENDUM = """
+LEARNING STYLE: KINESTHETIC
+- Focus on 'learning by doing' and physical analogies (e.g., 'Imagine you are a molecule moving like...').
+- Include a 'Quick Experiment' or 'Active Challenge' section with a simple physical task.
+- Use action-oriented verbs and real-world, hands-on applications.
+- Relate concepts to physical sensations or movement."""
+
+READING_STYLE_ADDENDUM = """
+LEARNING STYLE: READING/WRITING
+- Provide a structured, information-dense passage with clear headings.
+- Include a 'Key Definitions' list and a 'Summary Table' description.
+- Use precise vocabulary and encourage deep textual analysis.
+- Suggest a 'Writing Prompt' or note-taking strategy at the end of the passage."""
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # SPEECH ANALYSIS PROMPTS
@@ -118,11 +148,23 @@ def build_lesson_prompt(
     tiers: int,
     language: str,
     base_text: Optional[str] = None,
+    learning_style: Optional[str] = None,
 ) -> tuple[str, str]:
     """Returns (system_prompt, user_prompt) for lesson generation."""
     base_text_section = (
         BASE_TEXT_TEMPLATE.format(base_text=base_text) if base_text else ""
     )
+    
+    style_addendum = ""
+    if learning_style == "visual":
+        style_addendum = VISUAL_STYLE_ADDENDUM
+    elif learning_style == "auditory":
+        style_addendum = AUDITORY_STYLE_ADDENDUM
+    elif learning_style == "kinesthetic":
+        style_addendum = KINESTHETIC_STYLE_ADDENDUM
+    elif learning_style == "reading_writing":
+        style_addendum = READING_STYLE_ADDENDUM
+        
     user_prompt = LESSON_GEN_USER_TEMPLATE.format(
         topic=topic,
         grade=grade,
@@ -130,6 +172,10 @@ def build_lesson_prompt(
         language=language,
         base_text_section=base_text_section,
     )
+    
+    if style_addendum:
+        user_prompt += f"\n\n{style_addendum}"
+        
     return LESSON_GEN_SYSTEM, user_prompt
 
 

@@ -4,9 +4,9 @@ from typing import List
 
 
 class Settings(BaseSettings):
-    # Auth0
-    auth0_domain: str
-    auth0_audience: str
+    # Auth0 (legacy — now using local auth, kept optional for backward compat)
+    auth0_domain: str = ""
+    auth0_audience: str = ""
     auth0_role_claim: str = "https://eduvision/role"
 
     # OpenRouter / Gemini

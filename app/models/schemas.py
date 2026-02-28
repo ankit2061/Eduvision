@@ -22,6 +22,8 @@ class DisabilityType(str, Enum):
     VISUAL = "visual"
     MOTOR = "motor"
     AUTISM = "autism"
+    ADHD = "adhd"
+    INTELLECTUAL = "intellectual"
     AAC = "aac"
     NONE = "none"
 
@@ -52,6 +54,7 @@ class AccessibilityProfile(BaseModel):
 
 class CurrentUser(BaseModel):
     user_id: str
+    name: Optional[str] = None
     email: Optional[str] = None
     role: str  # "teacher" | "student" | "admin" from Auth0 token
     sub_role: Optional[SubRole] = None  # Loaded from DB if available
@@ -61,7 +64,8 @@ class CurrentUser(BaseModel):
 
 class UserProfileResponse(BaseModel):
     user_id: str
-    email: Optional[str]
+    name: Optional[str] = None
+    email: Optional[str] = None
     role: str
     sub_role: Optional[SubRole]
     school_id: Optional[str]
@@ -86,6 +90,7 @@ class LessonGenerateRequest(BaseModel):
     tiers: int = Field(3, ge=1, le=5)
     language: str = Field("en", description="ISO 639-1 language code")
     base_text: Optional[str] = Field(None, description="Optional seed text for differentiation")
+    learning_style: Optional[LearningStyle] = Field(None, description="Target learning style for the content")
     generate_audio: bool = True
 
 

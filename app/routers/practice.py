@@ -98,9 +98,9 @@ async def analyze_speech(
         logger.warning(f"[Practice] Audio upload failed: {e}")
         audio_url = ""
 
-    # Transcribe audio via Gemini
+    # Transcribe audio via ElevenLabs
     try:
-        transcript = await gemini.transcribe_audio(audio_bytes, mime_type)
+        transcript = await elevenlabs.stt(audio_bytes, mime_type)
     except Exception as e:
         logger.error(f"[Practice] Transcription failed: {e}")
         raise HTTPException(status_code=502, detail=f"Transcription failed: {e}")

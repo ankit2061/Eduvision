@@ -25,6 +25,19 @@ CREATE TABLE IF NOT EXISTS lessons (
     FOREIGN KEY (teacher_id) REFERENCES users(user_id)
 );
 
+-- ─── Assignments ─────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS assignments (
+    assignment_id VARCHAR(128)  NOT NULL PRIMARY KEY,
+    lesson_id     VARCHAR(128)  NOT NULL,
+    teacher_id    VARCHAR(128)  NOT NULL,
+    assigned_to   VARCHAR(128)  NOT NULL,
+    due_date      VARCHAR(64),
+    status        VARCHAR(32)   NOT NULL DEFAULT 'pending',
+    created_at    TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (lesson_id) REFERENCES lessons(lesson_id),
+    FOREIGN KEY (teacher_id) REFERENCES users(user_id)
+);
+
 -- ─── Lesson Assets ────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS lesson_assets (
     lesson_id   VARCHAR(128)  NOT NULL,
