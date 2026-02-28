@@ -10,10 +10,15 @@ class Settings(BaseSettings):
     auth0_role_claim: str = "https://eduvision/role"
 
     # OpenRouter / Gemini
-    openrouter_api_key: str
-    openrouter_base_url: str = "https://openrouter.ai/api/v1"
-    gemini_model: str = "google/gemini-2.5-flash"
-    gemini_audio_model: str = "google/gemini-2.5-flash"
+    # openrouter_api_key: str
+    # openrouter_base_url: str = "https://openrouter.ai/api/v1"
+    gemini_api_key: str
+    gemini_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/"
+    gemini_model: str = "gemini-2.5-flash"
+    gemini_audio_model: str = "gemini-2.5-pro"
+
+    # Hugging Face
+    hf_token: str
 
     # ElevenLabs
     elevenlabs_api_key: str

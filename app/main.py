@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from loguru import logger
 
 from app.config import get_settings
-from app.routers import auth, lesson, practice, teacher, sign, events
+from app.routers import auth, lesson, practice, teacher, sign, events, admin
 
 settings = get_settings()
 
@@ -39,6 +39,7 @@ app.include_router(practice.router)
 app.include_router(teacher.router)
 app.include_router(sign.router)
 app.include_router(events.router)
+app.include_router(admin.router)
 
 # ─── Global Error Handler ─────────────────────────────────────────────────────
 @app.exception_handler(Exception)

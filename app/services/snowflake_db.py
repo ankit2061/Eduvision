@@ -62,33 +62,75 @@ async def upsert_user(
     role: str,
     school_id: Optional[str] = None,
     accessibility_profile: Optional[dict] = None,
+    sub_role: Optional[str] = None,
+    disability_type: Optional[str] = None,
+    learning_style: Optional[str] = None,
+    onboarding_complete: bool = False,
 ):
     profile_json = json.dumps(accessibility_profile or {})
     sql = """
         MERGE INTO users AS target
-        USING (SELECT %s AS user_id, %s AS role, %s AS school_id, PARSE_JSON(%s) AS accessibility_profile_json) AS src
+        USING (SELECT %s AS user_id, %s AS role, %s AS school_id, PARSE_JSON(%s) AS accessibility_profile_json, %s AS sub_role, %s AS disability_type, %s AS learning_style, %s AS onboarding_complete) AS src
         ON target.user_id = src.user_id
         WHEN MATCHED THEN UPDATE SET
             role = src.role,
             school_id = src.school_id,
-            accessibility_profile_json = src.accessibility_profile_json
-        WHEN NOT MATCHED THEN INSERT (user_id, role, school_id, accessibility_profile_json, created_at)
-            VALUES (src.user_id, src.role, src.school_id, src.accessibility_profile_json, CURRENT_TIMESTAMP)
+            accessibility_profile_json = src.accessibility_profile_json,
+            sub_role = src.sub_role,
+            disability_type = src.disability_type,
+            learning_style = src.learning_style,
+            onboarding_complete = src.onboarding_complete
+        WHEN NOT MATCHED THEN INSERT (user_id, role, school_id, accessibility_profile_json, sub_role, disability_type, learning_style, onboarding_complete, created_at)
+            VALUES (src.user_id, src.role, src.school_id, src.accessibility_profile_json, src.sub_role, src.disability_type, src.learning_style, src.onboarding_complete, CURRENT_TIMESTAMP)
     """
-    await execute(sql, (user_id, role, school_id, profile_json))
+    await execute(sql, (user_id, role, school_id, profile_json, sub_role, disability_type, learning_style, onboarding_complete))
     logger.info(f"[Snowflake] upsert_user: {user_id}")
 
 
 async def get_user(user_id: str) -> Optional[dict]:
     rows = await execute(
-        "SELECT user_id, role, school_id, accessibility_profile_json FROM users WHERE user_id = %s",
+        "SELECT user_id, role, school_id, accessibility_profile_json, sub_role, disability_type, learning_style, onboarding_complete FROM users WHERE user_id = %s",
         (user_id,),
         fetch=True,
     )
     if not rows:
         return None
     r = rows[0]
-    return {"user_id": r[0], "role": r[1], "school_id": r[2], "accessibility_profile_json": r[3]}
+    return {
+        "user_id": r[0], "role": r[1], "school_id": r[2], 
+        "accessibility_profile_json": r[3], "sub_role": r[4], 
+        "disability_type": r[5], "learning_style": r[6], 
+        "onboarding_complete": bool(r[7]) if r[7] is not None else False
+    }
+
+async def complete_onboarding(user_id: str, sub_role: str, disability_type: Optional[str], learning_style: Optional[str], accessibility_profile: Optional[dict]):
+    profile_json = json.dumps(accessibility_profile or {})
+    sql = """
+        UPDATE users SET
+            sub_role = %s,
+            disability_type = %s,
+            learning_style = %s,
+            accessibility_profile_json = PARSE_JSON(%s),
+            onboarding_complete = TRUE
+        WHERE user_id = %s
+    """
+    await execute(sql, (sub_role, disability_type, learning_style, profile_json, user_id))
+    logger.info(f"[Snowflake] complete_onboarding for {user_id}")
+
+async def list_students_by_school(school_id: str) -> list:
+    rows = await execute(
+        "SELECT user_id, role, sub_role, disability_type, learning_style, onboarding_complete, accessibility_profile_json FROM users WHERE school_id = %s",
+        (school_id,),
+        fetch=True,
+    )
+    return [
+       {
+           "user_id": r[0], "role": r[1], "sub_role": r[2],
+           "disability_type": r[3], "learning_style": r[4],
+           "onboarding_complete": bool(r[5]) if r[5] is not None else False,
+           "accessibility_profile_json": r[6]
+       } for r in (rows or [])
+    ]
 
 
 # ─── Lessons ──────────────────────────────────────────────────────────────────
@@ -103,7 +145,7 @@ async def insert_lesson(
 ) -> str:
     sql = """
         INSERT INTO lessons (lesson_id, teacher_id, topic, grade, tiers, content_json, created_at)
-        VALUES (%s, %s, %s, %s, %s, PARSE_JSON(%s), CURRENT_TIMESTAMP)
+        SELECT %s, %s, %s, %s, %s, PARSE_JSON(%s), CURRENT_TIMESTAMP
     """
     await execute(sql, (lesson_id, teacher_id, topic, grade, tiers, json.dumps(content_json)))
     logger.info(f"[Snowflake] insert_lesson: {lesson_id}")
@@ -123,6 +165,16 @@ async def get_lesson(lesson_id: str) -> Optional[dict]:
         "lesson_id": r[0], "teacher_id": r[1], "topic": r[2],
         "grade": r[3], "tiers": r[4], "content_json": r[5], "created_at": str(r[6]),
     }
+
+
+async def update_lesson(lesson_id: str, content_json: dict):
+    sql = """
+        UPDATE lessons
+        SET content_json = PARSE_JSON(%s)
+        WHERE lesson_id = %s
+    """
+    await execute(sql, (json.dumps(content_json), lesson_id))
+    logger.info(f"[Snowflake] update_lesson: {lesson_id}")
 
 
 async def list_lessons_by_teacher(teacher_id: str) -> list:
@@ -167,7 +219,7 @@ async def create_session(
 ):
     sql = """
         INSERT INTO practice_sessions (session_id, student_id, lesson_id, mode, accessibility_mode_json, started_at)
-        VALUES (%s, %s, %s, %s, PARSE_JSON(%s), CURRENT_TIMESTAMP)
+        SELECT %s, %s, %s, %s, PARSE_JSON(%s), CURRENT_TIMESTAMP
     """
     await execute(sql, (session_id, student_id, lesson_id, mode, json.dumps(accessibility_json)))
     logger.info(f"[Snowflake] create_session: {session_id}")
@@ -207,7 +259,7 @@ async def save_artifact(
 ):
     sql = """
         INSERT INTO practice_artifacts (session_id, audio_url, transcript_text, feedback_json, scores_json)
-        VALUES (%s, %s, %s, PARSE_JSON(%s), PARSE_JSON(%s))
+        SELECT %s, %s, %s, PARSE_JSON(%s), PARSE_JSON(%s)
     """
     await execute(sql, (session_id, audio_url, transcript_text, json.dumps(feedback_json), json.dumps(scores_json)))
     logger.info(f"[Snowflake] save_artifact: session={session_id}")
@@ -298,7 +350,7 @@ async def log_event(user_id: str, event_type: str, payload: dict):
     event_id = str(uuid.uuid4())
     sql = """
         INSERT INTO events (event_id, user_id, event_type, payload_json, ts)
-        VALUES (%s, %s, %s, PARSE_JSON(%s), CURRENT_TIMESTAMP)
+        SELECT %s, %s, %s, PARSE_JSON(%s), CURRENT_TIMESTAMP
     """
     await execute(sql, (event_id, user_id, event_type, json.dumps(payload or {})))
     logger.debug(f"[Snowflake] log_event: {event_type} for user={user_id}")

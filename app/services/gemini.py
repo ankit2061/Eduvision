@@ -14,14 +14,14 @@ from app.utils.prompts import build_lesson_prompt, build_speech_analysis_prompt
 settings = get_settings()
 
 _client = AsyncOpenAI(
-    api_key=settings.openrouter_api_key,
-    base_url=settings.openrouter_base_url,
+    api_key=settings.gemini_api_key,
+    base_url=settings.gemini_base_url,
 )
 
-_EXTRA_HEADERS = {
-    "HTTP-Referer": "https://eduvision.app",
-    "X-Title": "EduVision AI",
-}
+# _EXTRA_HEADERS = {
+#     "HTTP-Referer": "https://eduvision.app",
+#     "X-Title": "EduVision AI",
+# }
 
 
 async def generate_lesson(
@@ -45,7 +45,6 @@ async def generate_lesson(
             {"role": "user", "content": user_prompt},
         ],
         temperature=0.7,
-        extra_headers=_EXTRA_HEADERS,
     )
     raw = response.choices[0].message.content.strip()
 
@@ -95,7 +94,6 @@ async def transcribe_audio(audio_bytes: bytes, mime_type: str = "audio/wav") -> 
             }
         ],
         temperature=0.0,
-        extra_headers=_EXTRA_HEADERS,
     )
     transcript = response.choices[0].message.content.strip()
     logger.info(f"[Gemini] Transcript: {transcript[:100]}...")
@@ -129,7 +127,6 @@ async def analyze_speech(
             {"role": "user", "content": user_prompt},
         ],
         temperature=0.3,
-        extra_headers=_EXTRA_HEADERS,
     )
     raw = response.choices[0].message.content.strip()
 
@@ -175,7 +172,6 @@ async def translate_sign(frames_b64: list[str]) -> dict:
         model=settings.gemini_model,
         messages=[{"role": "user", "content": content}],
         temperature=0.2,
-        extra_headers=_EXTRA_HEADERS,
     )
     raw = response.choices[0].message.content.strip()
     if raw.startswith("```"):

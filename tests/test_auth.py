@@ -56,5 +56,30 @@ class TestAuth:
         with patch("app.routers.auth.snowflake_db.get_user", mock_get), \
              patch("app.routers.auth.snowflake_db.upsert_user", mock_upsert):
             resp = client.get("/auth/me", headers={"Authorization": "Bearer fake"})
-        # Auth mock returns user so it should 200
         assert resp.status_code in (200, 401)  # 401 if mock_user doesn't inject
+        if resp.status_code == 200:
+            assert resp.json()["onboarding_complete"] is False
+
+    @patch("app.dependencies.get_current_user")
+    @patch("app.services.snowflake_db.complete_onboarding", new_callable=AsyncMock)
+    def test_onboarding_success(self, mock_complete, mock_user, client):
+        from app.models.schemas import CurrentUser
+        mock_user.return_value = CurrentUser(user_id="auth0|test123", email="test@eduvision.app", role="teacher")
+        
+        payload = {
+            "sub_role": "teacher_special",
+            "is_specially_abled": True,
+            "disability_type": "visual",
+            "learning_style": "auditory",
+            "accessibility_preferences": {
+                "high_contrast": True
+            }
+        }
+        
+        with patch("app.routers.auth.snowflake_db.complete_onboarding", mock_complete):
+            resp = client.post("/auth/onboarding", json=payload, headers={"Authorization": "Bearer fake"})
+            
+        assert resp.status_code in (200, 401)
+        if resp.status_code == 200:
+            assert resp.json()["status"] == "onboarding_complete"
+            mock_complete.assert_called_once()

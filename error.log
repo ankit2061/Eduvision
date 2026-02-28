@@ -1,0 +1,1066 @@
+INFO:     Will watch for changes in these directories: ['/Users/ankittalukder/Desktop/Diversion/Eduvision']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [5151] using WatchFiles
+INFO:     Started server process [5161]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2026-02-28 12:26:21.418 | WARNING  | app.dependencies:get_current_user:95 - [Auth0] JWT error: Error decoding token headers.
+INFO:     127.0.0.1:61450 - "POST /lesson/generate HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:62547 - "OPTIONS /lesson/generate HTTP/1.1" 200 OK
+2026-02-28 12:28:35.571 | INFO     | app.dependencies:_fetch_jwks:32 - [Auth0] JWKS fetched and cached.
+2026-02-28 12:28:35.606 | INFO     | app.services.gemini:generate_lesson:40 - [Gemini] Generating lesson: topic=Science, grade=5, tiers=3
+2026-02-28 12:28:47.057 | INFO     | app.services.elevenlabs:tts:64 - [ElevenLabs] TTS: voice=21m00Tcm4TlvDq8ikWAM, text_len=613
+2026-02-28 12:28:47.075 | INFO     | app.services.elevenlabs:tts:64 - [ElevenLabs] TTS: voice=21m00Tcm4TlvDq8ikWAM, text_len=1062
+2026-02-28 12:28:47.095 | INFO     | app.services.elevenlabs:tts:64 - [ElevenLabs] TTS: voice=21m00Tcm4TlvDq8ikWAM, text_len=1503
+2026-02-28 12:28:55.795 | WARNING  | app.routers.lesson:process_tier:72 - [Lesson] Audio gen failed for tier 1: An error occurred (NoSuchBucket) when calling the PutObject operation: The specified bucket does not exist
+2026-02-28 12:28:59.444 | WARNING  | app.routers.lesson:process_tier:72 - [Lesson] Audio gen failed for tier 2: An error occurred (NoSuchBucket) when calling the PutObject operation: The specified bucket does not exist
+2026-02-28 12:29:02.936 | WARNING  | app.routers.lesson:process_tier:72 - [Lesson] Audio gen failed for tier 3: An error occurred (NoSuchBucket) when calling the PutObject operation: The specified bucket does not exist
+2026-02-28 12:29:08.512 | INFO     | app.services.snowflake_db:insert_lesson:151 - [Snowflake] insert_lesson: 8d093bb0-753c-4e56-bac2-312bd0776676
+INFO:     127.0.0.1:62547 - "POST /lesson/generate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62547 - "OPTIONS /events/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62549 - "OPTIONS /lesson/library HTTP/1.1" 200 OK
+2026-02-28 12:29:12.532 | DEBUG    | app.services.snowflake_db:log_event:346 - [Snowflake] log_event: lesson_created for user=google-oauth2|102564900452380334829
+INFO:     127.0.0.1:62547 - "POST /events/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62549 - "GET /lesson/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65350 - "OPTIONS /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65354 - "OPTIONS /teacher/class/insights HTTP/1.1" 200 OK
+2026-02-28 12:34:13.496 | ERROR    | app.main:global_exception_handler:47 - Unhandled error on http://localhost:8000/teacher/class/insights: 250001: Could not connect to Snowflake backend after 2 attempt(s).Aborting
+INFO:     127.0.0.1:65354 - "GET /teacher/class/insights HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/util/connection.py", line 79, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.12/socket.py", line 976, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 715, in urlopen
+    httplib_response = self._make_request(
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 404, in _make_request
+    self._validate_conn(conn)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 1058, in _validate_conn
+    conn.connect()
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 363, in connect
+    self.sock = conn = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 186, in _new_conn
+    raise NewConnectionError(
+snowflake.connector.vendored.urllib3.exceptions.NewConnectionError: <snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc7650>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 827, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 799, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+snowflake.connector.vendored.urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='aqptjvw-vv95242.snowflakecomputing.com', port=443): Max retries exceeded with url: /session/v1/login-request?request_id=83b91ea3-74c1-45d1-8b40-8cadee122305&databaseName=EDUVISION&schemaName=PUBLIC&warehouse=COMPUTE_WH&roleName=SYSADMIN&request_guid=2232281e-bacc-4859-83f3-e2505588a025 (Caused by NewConnectionError('<snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc7650>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 1078, in _request_exec
+    raw_ret = session.request(
+              ^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+snowflake.connector.vendored.requests.exceptions.ConnectionError: HTTPSConnectionPool(host='aqptjvw-vv95242.snowflakecomputing.com', port=443): Max retries exceeded with url: /session/v1/login-request?request_id=83b91ea3-74c1-45d1-8b40-8cadee122305&databaseName=EDUVISION&schemaName=PUBLIC&warehouse=COMPUTE_WH&roleName=SYSADMIN&request_guid=2232281e-bacc-4859-83f3-e2505588a025 (Caused by NewConnectionError('<snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc7650>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1373, in _authenticate
+    auth.authenticate(
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/auth/_auth.py", line 250, in authenticate
+    ret = self._rest._post_request(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 734, in _post_request
+    ret = self.fetch(
+          ^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 843, in fetch
+    ret = self._request_exec_wrapper(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 979, in _request_exec_wrapper
+    raise e
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 884, in _request_exec_wrapper
+    return_object = self._request_exec(
+                    ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 1172, in _request_exec
+    raise OperationalError(
+snowflake.connector.errors.OperationalError: 251011: ConnectionTimeout occurred during login. Will be handled by authenticator
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 411, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 69, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 148, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
+    await route.handle(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/routers/teacher.py", line 18, in class_insights
+    data = await snowflake_db.get_class_insights(user.user_id, class_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 262, in get_class_insights
+    rows = await execute(
+           ^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 55, in execute
+    return await _run_sync(_execute, sql, params, fetch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 46, in _execute
+    with _get_connection() as conn:
+         ^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 22, in _get_connection
+    return snowflake.connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/__init__.py", line 55, in Connect
+    return SnowflakeConnection(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 442, in __init__
+    self.connect(**kwargs)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 745, in connect
+    self.__open_connection()
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1073, in __open_connection
+    self.authenticate_with_retry(self.auth_class)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1345, in authenticate_with_retry
+    self._authenticate(auth_instance)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1417, in _authenticate
+    raise auth_op from e
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1394, in _authenticate
+    auth_instance.handle_timeout(
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/auth/by_plugin.py", line 212, in handle_timeout
+    raise error
+snowflake.connector.errors.OperationalError: 250001: Could not connect to Snowflake backend after 2 attempt(s).Aborting
+2026-02-28 12:34:13.553 | ERROR    | app.main:global_exception_handler:47 - Unhandled error on http://localhost:8000/auth/me: 250001: Could not connect to Snowflake backend after 2 attempt(s).Aborting
+INFO:     127.0.0.1:65350 - "GET /auth/me HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/util/connection.py", line 79, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.12/socket.py", line 976, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 715, in urlopen
+    httplib_response = self._make_request(
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 404, in _make_request
+    self._validate_conn(conn)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 1058, in _validate_conn
+    conn.connect()
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 363, in connect
+    self.sock = conn = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 186, in _new_conn
+    raise NewConnectionError(
+snowflake.connector.vendored.urllib3.exceptions.NewConnectionError: <snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc75f0>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 827, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 799, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+snowflake.connector.vendored.urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='aqptjvw-vv95242.snowflakecomputing.com', port=443): Max retries exceeded with url: /session/v1/login-request?request_id=58c59122-adf7-45af-af96-d18d625b8d09&databaseName=EDUVISION&schemaName=PUBLIC&warehouse=COMPUTE_WH&roleName=SYSADMIN&request_guid=6c0534fb-6c17-4251-95e0-28a8f581a0e2 (Caused by NewConnectionError('<snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc75f0>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 1078, in _request_exec
+    raw_ret = session.request(
+              ^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+snowflake.connector.vendored.requests.exceptions.ConnectionError: HTTPSConnectionPool(host='aqptjvw-vv95242.snowflakecomputing.com', port=443): Max retries exceeded with url: /session/v1/login-request?request_id=58c59122-adf7-45af-af96-d18d625b8d09&databaseName=EDUVISION&schemaName=PUBLIC&warehouse=COMPUTE_WH&roleName=SYSADMIN&request_guid=6c0534fb-6c17-4251-95e0-28a8f581a0e2 (Caused by NewConnectionError('<snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc75f0>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1373, in _authenticate
+    auth.authenticate(
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/auth/_auth.py", line 250, in authenticate
+    ret = self._rest._post_request(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 734, in _post_request
+    ret = self.fetch(
+          ^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 843, in fetch
+    ret = self._request_exec_wrapper(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 979, in _request_exec_wrapper
+    raise e
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 884, in _request_exec_wrapper
+    return_object = self._request_exec(
+                    ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 1172, in _request_exec
+    raise OperationalError(
+snowflake.connector.errors.OperationalError: 251011: ConnectionTimeout occurred during login. Will be handled by authenticator
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 411, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 69, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 148, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
+    await route.handle(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/routers/auth.py", line 14, in get_me
+    db_user = await snowflake_db.get_user(user.user_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 91, in get_user
+    rows = await execute(
+           ^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 55, in execute
+    return await _run_sync(_execute, sql, params, fetch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 46, in _execute
+    with _get_connection() as conn:
+         ^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 22, in _get_connection
+    return snowflake.connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/__init__.py", line 55, in Connect
+    return SnowflakeConnection(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 442, in __init__
+    self.connect(**kwargs)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 745, in connect
+    self.__open_connection()
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1073, in __open_connection
+    self.authenticate_with_retry(self.auth_class)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1345, in authenticate_with_retry
+    self._authenticate(auth_instance)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1417, in _authenticate
+    raise auth_op from e
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1394, in _authenticate
+    auth_instance.handle_timeout(
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/auth/by_plugin.py", line 212, in handle_timeout
+    raise error
+snowflake.connector.errors.OperationalError: 250001: Could not connect to Snowflake backend after 2 attempt(s).Aborting
+2026-02-28 12:34:13.562 | ERROR    | app.main:global_exception_handler:47 - Unhandled error on http://localhost:8000/lesson/library: 250001: Could not connect to Snowflake backend after 2 attempt(s).Aborting
+INFO:     127.0.0.1:65352 - "GET /lesson/library HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/util/connection.py", line 79, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.12/socket.py", line 976, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 715, in urlopen
+    httplib_response = self._make_request(
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 404, in _make_request
+    self._validate_conn(conn)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 1058, in _validate_conn
+    conn.connect()
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 363, in connect
+    self.sock = conn = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 186, in _new_conn
+    raise NewConnectionError(
+snowflake.connector.vendored.urllib3.exceptions.NewConnectionError: <snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc6a50>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 827, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 799, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+snowflake.connector.vendored.urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='aqptjvw-vv95242.snowflakecomputing.com', port=443): Max retries exceeded with url: /session/v1/login-request?request_id=34ffa1e4-6141-4bb9-b90e-a9fb824c4d00&databaseName=EDUVISION&schemaName=PUBLIC&warehouse=COMPUTE_WH&roleName=SYSADMIN&request_guid=4914e851-e804-4e42-8265-826764a83123 (Caused by NewConnectionError('<snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc6a50>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 1078, in _request_exec
+    raw_ret = session.request(
+              ^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+snowflake.connector.vendored.requests.exceptions.ConnectionError: HTTPSConnectionPool(host='aqptjvw-vv95242.snowflakecomputing.com', port=443): Max retries exceeded with url: /session/v1/login-request?request_id=34ffa1e4-6141-4bb9-b90e-a9fb824c4d00&databaseName=EDUVISION&schemaName=PUBLIC&warehouse=COMPUTE_WH&roleName=SYSADMIN&request_guid=4914e851-e804-4e42-8265-826764a83123 (Caused by NewConnectionError('<snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc6a50>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1373, in _authenticate
+    auth.authenticate(
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/auth/_auth.py", line 250, in authenticate
+    ret = self._rest._post_request(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 734, in _post_request
+    ret = self.fetch(
+          ^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 843, in fetch
+    ret = self._request_exec_wrapper(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 979, in _request_exec_wrapper
+    raise e
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 884, in _request_exec_wrapper
+    return_object = self._request_exec(
+                    ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 1172, in _request_exec
+    raise OperationalError(
+snowflake.connector.errors.OperationalError: 251011: ConnectionTimeout occurred during login. Will be handled by authenticator
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 411, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 69, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 148, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
+    await route.handle(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/routers/lesson.py", line 109, in list_library
+    lessons = await snowflake_db.list_lessons_by_teacher(user.user_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 171, in list_lessons_by_teacher
+    rows = await execute(
+           ^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 55, in execute
+    return await _run_sync(_execute, sql, params, fetch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 46, in _execute
+    with _get_connection() as conn:
+         ^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 22, in _get_connection
+    return snowflake.connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/__init__.py", line 55, in Connect
+    return SnowflakeConnection(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 442, in __init__
+    self.connect(**kwargs)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 745, in connect
+    self.__open_connection()
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1073, in __open_connection
+    self.authenticate_with_retry(self.auth_class)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1345, in authenticate_with_retry
+    self._authenticate(auth_instance)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1417, in _authenticate
+    raise auth_op from e
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1394, in _authenticate
+    auth_instance.handle_timeout(
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/auth/by_plugin.py", line 212, in handle_timeout
+    raise error
+snowflake.connector.errors.OperationalError: 250001: Could not connect to Snowflake backend after 2 attempt(s).Aborting
+2026-02-28 12:34:15.597 | ERROR    | app.main:global_exception_handler:47 - Unhandled error on http://localhost:8000/teacher/class/insights: 250001: Could not connect to Snowflake backend after 2 attempt(s).Aborting
+INFO:     127.0.0.1:65356 - "GET /teacher/class/insights HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/util/connection.py", line 79, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.12/socket.py", line 976, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 715, in urlopen
+    httplib_response = self._make_request(
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 404, in _make_request
+    self._validate_conn(conn)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 1058, in _validate_conn
+    conn.connect()
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 363, in connect
+    self.sock = conn = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 186, in _new_conn
+    raise NewConnectionError(
+snowflake.connector.vendored.urllib3.exceptions.NewConnectionError: <snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x11105b140>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 827, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 799, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+snowflake.connector.vendored.urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='aqptjvw-vv95242.snowflakecomputing.com', port=443): Max retries exceeded with url: /session/v1/login-request?request_id=d30c12c9-4e88-4306-91e2-77e06eea2ef6&databaseName=EDUVISION&schemaName=PUBLIC&warehouse=COMPUTE_WH&roleName=SYSADMIN&request_guid=a15f544e-55e2-4eaa-9171-fec7e8b0b979 (Caused by NewConnectionError('<snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x11105b140>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 1078, in _request_exec
+    raw_ret = session.request(
+              ^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+snowflake.connector.vendored.requests.exceptions.ConnectionError: HTTPSConnectionPool(host='aqptjvw-vv95242.snowflakecomputing.com', port=443): Max retries exceeded with url: /session/v1/login-request?request_id=d30c12c9-4e88-4306-91e2-77e06eea2ef6&databaseName=EDUVISION&schemaName=PUBLIC&warehouse=COMPUTE_WH&roleName=SYSADMIN&request_guid=a15f544e-55e2-4eaa-9171-fec7e8b0b979 (Caused by NewConnectionError('<snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x11105b140>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1373, in _authenticate
+    auth.authenticate(
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/auth/_auth.py", line 250, in authenticate
+    ret = self._rest._post_request(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 734, in _post_request
+    ret = self.fetch(
+          ^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 843, in fetch
+    ret = self._request_exec_wrapper(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 979, in _request_exec_wrapper
+    raise e
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 884, in _request_exec_wrapper
+    return_object = self._request_exec(
+                    ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 1172, in _request_exec
+    raise OperationalError(
+snowflake.connector.errors.OperationalError: 251011: ConnectionTimeout occurred during login. Will be handled by authenticator
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 411, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 69, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 148, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
+    await route.handle(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/routers/teacher.py", line 18, in class_insights
+    data = await snowflake_db.get_class_insights(user.user_id, class_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 262, in get_class_insights
+    rows = await execute(
+           ^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 55, in execute
+    return await _run_sync(_execute, sql, params, fetch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 46, in _execute
+    with _get_connection() as conn:
+         ^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 22, in _get_connection
+    return snowflake.connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/__init__.py", line 55, in Connect
+    return SnowflakeConnection(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 442, in __init__
+    self.connect(**kwargs)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 745, in connect
+    self.__open_connection()
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1073, in __open_connection
+    self.authenticate_with_retry(self.auth_class)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1345, in authenticate_with_retry
+    self._authenticate(auth_instance)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1417, in _authenticate
+    raise auth_op from e
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1394, in _authenticate
+    auth_instance.handle_timeout(
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/auth/by_plugin.py", line 212, in handle_timeout
+    raise error
+snowflake.connector.errors.OperationalError: 250001: Could not connect to Snowflake backend after 2 attempt(s).Aborting
+2026-02-28 12:34:15.618 | ERROR    | app.main:global_exception_handler:47 - Unhandled error on http://localhost:8000/auth/me: 250001: Could not connect to Snowflake backend after 2 attempt(s).Aborting
+INFO:     127.0.0.1:65383 - "GET /auth/me HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/util/connection.py", line 79, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.12/socket.py", line 976, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 715, in urlopen
+    httplib_response = self._make_request(
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 404, in _make_request
+    self._validate_conn(conn)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 1058, in _validate_conn
+    conn.connect()
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 363, in connect
+    self.sock = conn = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 186, in _new_conn
+    raise NewConnectionError(
+snowflake.connector.vendored.urllib3.exceptions.NewConnectionError: <snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc7530>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 827, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 799, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+snowflake.connector.vendored.urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='aqptjvw-vv95242.snowflakecomputing.com', port=443): Max retries exceeded with url: /session/v1/login-request?request_id=275ce342-ef0c-45fe-b58e-8cc160016d4a&databaseName=EDUVISION&schemaName=PUBLIC&warehouse=COMPUTE_WH&roleName=SYSADMIN&request_guid=b57242df-b902-4949-9763-f02c0c38f8db (Caused by NewConnectionError('<snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc7530>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 1078, in _request_exec
+    raw_ret = session.request(
+              ^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+snowflake.connector.vendored.requests.exceptions.ConnectionError: HTTPSConnectionPool(host='aqptjvw-vv95242.snowflakecomputing.com', port=443): Max retries exceeded with url: /session/v1/login-request?request_id=275ce342-ef0c-45fe-b58e-8cc160016d4a&databaseName=EDUVISION&schemaName=PUBLIC&warehouse=COMPUTE_WH&roleName=SYSADMIN&request_guid=b57242df-b902-4949-9763-f02c0c38f8db (Caused by NewConnectionError('<snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc7530>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1373, in _authenticate
+    auth.authenticate(
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/auth/_auth.py", line 250, in authenticate
+    ret = self._rest._post_request(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 734, in _post_request
+    ret = self.fetch(
+          ^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 843, in fetch
+    ret = self._request_exec_wrapper(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 979, in _request_exec_wrapper
+    raise e
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 884, in _request_exec_wrapper
+    return_object = self._request_exec(
+                    ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 1172, in _request_exec
+    raise OperationalError(
+snowflake.connector.errors.OperationalError: 251011: ConnectionTimeout occurred during login. Will be handled by authenticator
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 411, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 69, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 148, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
+    await route.handle(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/routers/auth.py", line 14, in get_me
+    db_user = await snowflake_db.get_user(user.user_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 91, in get_user
+    rows = await execute(
+           ^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 55, in execute
+    return await _run_sync(_execute, sql, params, fetch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 46, in _execute
+    with _get_connection() as conn:
+         ^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 22, in _get_connection
+    return snowflake.connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/__init__.py", line 55, in Connect
+    return SnowflakeConnection(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 442, in __init__
+    self.connect(**kwargs)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 745, in connect
+    self.__open_connection()
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1073, in __open_connection
+    self.authenticate_with_retry(self.auth_class)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1345, in authenticate_with_retry
+    self._authenticate(auth_instance)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1417, in _authenticate
+    raise auth_op from e
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1394, in _authenticate
+    auth_instance.handle_timeout(
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/auth/by_plugin.py", line 212, in handle_timeout
+    raise error
+snowflake.connector.errors.OperationalError: 250001: Could not connect to Snowflake backend after 2 attempt(s).Aborting
+2026-02-28 12:34:15.622 | ERROR    | app.main:global_exception_handler:47 - Unhandled error on http://localhost:8000/lesson/library: 250001: Could not connect to Snowflake backend after 2 attempt(s).Aborting
+INFO:     127.0.0.1:65381 - "GET /lesson/library HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 174, in _new_conn
+    conn = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/util/connection.py", line 79, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.12/socket.py", line 976, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 715, in urlopen
+    httplib_response = self._make_request(
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 404, in _make_request
+    self._validate_conn(conn)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 1058, in _validate_conn
+    conn.connect()
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 363, in connect
+    self.sock = conn = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connection.py", line 186, in _new_conn
+    raise NewConnectionError(
+snowflake.connector.vendored.urllib3.exceptions.NewConnectionError: <snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc4c20>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 827, in urlopen
+    return self.urlopen(
+           ^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/connectionpool.py", line 799, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/urllib3/util/retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+snowflake.connector.vendored.urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='aqptjvw-vv95242.snowflakecomputing.com', port=443): Max retries exceeded with url: /session/v1/login-request?request_id=ec324f42-48e1-413a-8463-05daa91ea3d2&databaseName=EDUVISION&schemaName=PUBLIC&warehouse=COMPUTE_WH&roleName=SYSADMIN&request_guid=512cb77e-c87a-4850-8e7d-797f07052d38 (Caused by NewConnectionError('<snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc4c20>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 1078, in _request_exec
+    raw_ret = session.request(
+              ^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/vendored/requests/adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+snowflake.connector.vendored.requests.exceptions.ConnectionError: HTTPSConnectionPool(host='aqptjvw-vv95242.snowflakecomputing.com', port=443): Max retries exceeded with url: /session/v1/login-request?request_id=ec324f42-48e1-413a-8463-05daa91ea3d2&databaseName=EDUVISION&schemaName=PUBLIC&warehouse=COMPUTE_WH&roleName=SYSADMIN&request_guid=512cb77e-c87a-4850-8e7d-797f07052d38 (Caused by NewConnectionError('<snowflake.connector.vendored.urllib3.connection.HTTPSConnection object at 0x110cc4c20>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1373, in _authenticate
+    auth.authenticate(
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/auth/_auth.py", line 250, in authenticate
+    ret = self._rest._post_request(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 734, in _post_request
+    ret = self.fetch(
+          ^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 843, in fetch
+    ret = self._request_exec_wrapper(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 979, in _request_exec_wrapper
+    raise e
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 884, in _request_exec_wrapper
+    return_object = self._request_exec(
+                    ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/network.py", line 1172, in _request_exec
+    raise OperationalError(
+snowflake.connector.errors.OperationalError: 251011: ConnectionTimeout occurred during login. Will be handled by authenticator
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 411, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 69, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 148, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
+    await route.handle(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/routers/lesson.py", line 109, in list_library
+    lessons = await snowflake_db.list_lessons_by_teacher(user.user_id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 171, in list_lessons_by_teacher
+    rows = await execute(
+           ^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 55, in execute
+    return await _run_sync(_execute, sql, params, fetch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniconda/base/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 46, in _execute
+    with _get_connection() as conn:
+         ^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/app/services/snowflake_db.py", line 22, in _get_connection
+    return snowflake.connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/__init__.py", line 55, in Connect
+    return SnowflakeConnection(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 442, in __init__
+    self.connect(**kwargs)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 745, in connect
+    self.__open_connection()
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1073, in __open_connection
+    self.authenticate_with_retry(self.auth_class)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1345, in authenticate_with_retry
+    self._authenticate(auth_instance)
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1417, in _authenticate
+    raise auth_op from e
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/connection.py", line 1394, in _authenticate
+    auth_instance.handle_timeout(
+  File "/Users/ankittalukder/Desktop/Diversion/Eduvision/.venv/lib/python3.12/site-packages/snowflake/connector/auth/by_plugin.py", line 212, in handle_timeout
+    raise error
+snowflake.connector.errors.OperationalError: 250001: Could not connect to Snowflake backend after 2 attempt(s).Aborting
+INFO:     127.0.0.1:54326 - "OPTIONS /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54326 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54326 - "OPTIONS /lesson/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54328 - "OPTIONS /teacher/class/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54326 - "GET /lesson/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54328 - "GET /teacher/class/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54328 - "OPTIONS /lesson/8d093bb0-753c-4e56-bac2-312bd0776676 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54326 - "GET /lesson/8d093bb0-753c-4e56-bac2-312bd0776676 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55369 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55414 - "GET /teacher/class/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55369 - "GET /lesson/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56138 - "GET /lesson/8d093bb0-753c-4e56-bac2-312bd0776676 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57428 - "OPTIONS /lesson/473c2b3a-4e75-40fc-8187-e486ca3adbfa HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57428 - "GET /lesson/473c2b3a-4e75-40fc-8187-e486ca3adbfa HTTP/1.1" 200 OK

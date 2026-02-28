@@ -3,6 +3,35 @@ from __future__ import annotations
 from typing import Optional, Any, Dict, List
 from pydantic import BaseModel, Field
 import uuid
+from enum import Enum
+
+
+# ─── Enums ────────────────────────────────────────────────────────────────────
+
+class SubRole(str, Enum):
+    TEACHER_NORMAL = "teacher_normal"
+    TEACHER_SPECIAL = "teacher_special"
+    STUDENT_NORMAL = "student_normal"
+    STUDENT_DIVYANGJAN = "student_divyangjan"
+    ADMIN = "admin"
+
+class DisabilityType(str, Enum):
+    SPEECH = "speech"
+    DYSLEXIA = "dyslexia"
+    HEARING = "hearing"
+    VISUAL = "visual"
+    MOTOR = "motor"
+    AUTISM = "autism"
+    AAC = "aac"
+    NONE = "none"
+
+class LearningStyle(str, Enum):
+    VISUAL = "visual"
+    AUDITORY = "auditory"
+    READING_WRITING = "reading_writing"
+    KINESTHETIC = "kinesthetic"
+    NONE = "none"
+
 
 
 # ─── Shared ───────────────────────────────────────────────────────────────────
@@ -24,7 +53,8 @@ class AccessibilityProfile(BaseModel):
 class CurrentUser(BaseModel):
     user_id: str
     email: Optional[str] = None
-    role: str  # "teacher" | "student" | "admin"
+    role: str  # "teacher" | "student" | "admin" from Auth0 token
+    sub_role: Optional[SubRole] = None  # Loaded from DB if available
 
 
 # ─── Auth ─────────────────────────────────────────────────────────────────────
@@ -33,8 +63,19 @@ class UserProfileResponse(BaseModel):
     user_id: str
     email: Optional[str]
     role: str
+    sub_role: Optional[SubRole]
     school_id: Optional[str]
+    disability_type: Optional[DisabilityType]
+    learning_style: Optional[LearningStyle]
+    onboarding_complete: bool
     accessibility_profile: Optional[AccessibilityProfile]
+
+class OnboardingRequest(BaseModel):
+    sub_role: SubRole
+    is_specially_abled: bool = False
+    disability_type: Optional[DisabilityType] = None
+    learning_style: Optional[LearningStyle] = None
+    accessibility_preferences: Optional[AccessibilityProfile] = None
 
 
 # ─── Lesson ───────────────────────────────────────────────────────────────────
@@ -76,6 +117,10 @@ class LessonSummary(BaseModel):
     grade: str
     tiers: int
     created_at: str
+
+
+class LessonUpdateRequest(BaseModel):
+    content_json: dict
 
 
 # ─── Practice ─────────────────────────────────────────────────────────────────

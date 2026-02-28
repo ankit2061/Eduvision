@@ -6,7 +6,7 @@ import uuid
 import asyncio
 from datetime import datetime, timezone
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, UploadFile, File
 from loguru import logger
 
 from app.dependencies import get_current_user, require_role
@@ -17,10 +17,35 @@ from app.models.schemas import (
     LessonTier,
     LessonAssignRequest,
     LessonSummary,
+    LessonUpdateRequest,
 )
-from app.services import gemini, elevenlabs, snowflake_db, storage
+from app.services import gemini, elevenlabs, snowflake_db, storage, huggingface
+from app.utils.audio import detect_mime_type
 
 router = APIRouter(prefix="/lesson", tags=["Lesson"])
+
+
+@router.post("/transcribe")
+async def transcribe_audio_endpoint(
+    audio: UploadFile = File(...),
+    user: CurrentUser = Depends(require_role("teacher", "admin")),
+):
+    """
+    Accepts an audio file upload (e.g. from MediaRecorder),
+    transcribes it using Gemini, and returns the transcript text.
+    """
+    audio_bytes = await audio.read()
+    if not audio_bytes:
+        raise HTTPException(status_code=400, detail="Empty audio file")
+
+    mime_type = detect_mime_type(audio.filename or "audio.webm", audio_bytes)
+
+    try:
+        transcript = await huggingface.transcribe_audio(audio_bytes)
+        return {"transcript": transcript}
+    except Exception as e:
+        logger.error(f"[Lesson] Transcription failed: {e}")
+        raise HTTPException(status_code=502, detail=f"Transcription failed: {e}")
 
 
 @router.post("/generate", response_model=LessonGenerateResponse)
@@ -168,3 +193,18 @@ async def assign_lesson(
         "due_date": req.due_date,
         "mode": req.mode,
     }
+
+
+@router.put("/{lesson_id}")
+async def update_lesson_endpoint(
+    lesson_id: str,
+    req: LessonUpdateRequest,
+    user: CurrentUser = Depends(require_role("teacher", "admin")),
+):
+    """Update lesson JSON content (e.g., human edits to tiers)."""
+    lesson = await snowflake_db.get_lesson(lesson_id)
+    if not lesson:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+
+    await snowflake_db.update_lesson(lesson_id, req.content_json)
+    return {"status": "updated", "lesson_id": lesson_id}
