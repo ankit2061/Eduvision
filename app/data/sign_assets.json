@@ -1,0 +1,74 @@
+{
+  "hello": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/hello.gif",
+    "asl_url": "https://cdn.eduvision.app/signs/asl/hello.gif",
+    "caption": "Greeting — wave hand near face"
+  },
+  "water": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/water.gif",
+    "caption": "Water — W handshape tapping chin"
+  },
+  "help": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/help.gif",
+    "asl_url": "https://cdn.eduvision.app/signs/asl/help.gif",
+    "caption": "Help — one fist on open palm, lift upward"
+  },
+  "yes": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/yes.gif",
+    "asl_url": "https://cdn.eduvision.app/signs/asl/yes.gif",
+    "caption": "Yes — fist nodding"
+  },
+  "no": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/no.gif",
+    "asl_url": "https://cdn.eduvision.app/signs/asl/no.gif",
+    "caption": "No — index and middle finger snap together with thumb"
+  },
+  "please": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/please.gif",
+    "asl_url": "https://cdn.eduvision.app/signs/asl/please.gif",
+    "caption": "Please — flat hand rubbing chest in circle"
+  },
+  "thank you": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/thank_you.gif",
+    "asl_url": "https://cdn.eduvision.app/signs/asl/thank_you.gif",
+    "caption": "Thank you — flat hand from chin forward"
+  },
+  "school": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/school.gif",
+    "caption": "School"
+  },
+  "book": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/book.gif",
+    "asl_url": "https://cdn.eduvision.app/signs/asl/book.gif",
+    "caption": "Book — open palms like opening a book"
+  },
+  "teacher": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/teacher.gif",
+    "asl_url": "https://cdn.eduvision.app/signs/asl/teacher.gif",
+    "caption": "Teacher"
+  },
+  "student": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/student.gif",
+    "caption": "Student / Learn"
+  },
+  "good": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/good.gif",
+    "asl_url": "https://cdn.eduvision.app/signs/asl/good.gif",
+    "caption": "Good — flat hand from chin forward"
+  },
+  "more": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/more.gif",
+    "asl_url": "https://cdn.eduvision.app/signs/asl/more.gif",
+    "caption": "More — fingertips touching repeatedly"
+  },
+  "stop": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/stop.gif",
+    "asl_url": "https://cdn.eduvision.app/signs/asl/stop.gif",
+    "caption": "Stop — edge of flat hand hits open palm"
+  },
+  "again": {
+    "isl_url": "https://cdn.eduvision.app/signs/isl/again.gif",
+    "asl_url": "https://cdn.eduvision.app/signs/asl/again.gif",
+    "caption": "Again — bent hand arcs onto open palm"
+  }
+}

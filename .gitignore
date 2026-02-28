@@ -1,0 +1,23 @@
+# Environment files — never commit real secrets
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.Python
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# macOS
+.DS_Store
