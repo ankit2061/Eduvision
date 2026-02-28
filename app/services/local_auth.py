@@ -1,12 +1,13 @@
 """
-Local SQLite authentication service.
+PostgreSQL authentication service.
 Handles user registration, login, password hashing, and JWT token generation.
-Replaces Auth0 entirely — zero external dependencies.
+Replaces Auth0 entirely — zero external dependencies other than Postgres.
 """
 
-import sqlite3
 import os
 import uuid
+import psycopg2
+from psycopg2.extras import RealDictCursor
 from datetime import datetime, timedelta
 from typing import Optional
 import bcrypt
@@ -15,35 +16,45 @@ from loguru import logger
 
 # ─── Config ───────────────────────────────────────────────────────────────────
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "eduvision_auth.db")
 SECRET_KEY = os.getenv("APP_SECRET_KEY", "eduvision-dev-secret-change-in-prod")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_HOURS = 24
 
 # ─── DB Init ──────────────────────────────────────────────────────────────────
 
-def _get_conn() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
+def _get_conn():
+    from dotenv import load_dotenv
+    load_dotenv()
+    db_url = os.getenv("DATABASE_URL")
+    if db_url:
+        db_url = db_url.strip("'").strip('"')
+        
+    if not db_url:
+        raise RuntimeError("DATABASE_URL environment variable is not set")
+    conn = psycopg2.connect(db_url)
     return conn
 
 
 def init_db():
     """Create users table if it doesn't exist."""
-    conn = _get_conn()
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS local_users (
-            id TEXT PRIMARY KEY,
-            name TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            hashed_password TEXT NOT NULL,
-            role TEXT NOT NULL CHECK(role IN ('teacher', 'student', 'admin')),
-            created_at TEXT NOT NULL DEFAULT (datetime('now'))
-        )
-    """)
-    conn.commit()
-    conn.close()
-    logger.info(f"[LocalAuth] SQLite DB initialized at {os.path.abspath(DB_PATH)}")
+    try:
+        conn = _get_conn()
+        with conn.cursor() as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS local_users (
+                    id VARCHAR(128) PRIMARY KEY,
+                    name VARCHAR(255) NOT NULL,
+                    email VARCHAR(255) UNIQUE NOT NULL,
+                    hashed_password VARCHAR(255) NOT NULL,
+                    role VARCHAR(32) NOT NULL CHECK(role IN ('teacher', 'student', 'admin')),
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+        conn.commit()
+        conn.close()
+        logger.info("[LocalAuth] PostgreSQL DB initialized")
+    except Exception as e:
+        logger.warning(f"[LocalAuth] Could not initialize PostgreSQL: {e}")
 
 
 # Run on import
@@ -97,19 +108,22 @@ def register_user(name: str, email: str, password: str, role: str) -> dict:
     """Register a new user. Returns user dict or raises ValueError."""
     conn = _get_conn()
     
-    # Check if email already exists
-    existing = conn.execute("SELECT id FROM local_users WHERE email = ?", (email.lower(),)).fetchone()
-    if existing:
-        conn.close()
-        raise ValueError("Email already registered")
+    with conn.cursor() as cur:
+        # Check if email already exists
+        cur.execute("SELECT id FROM local_users WHERE email = %s", (email.lower(),))
+        existing = cur.fetchone()
+        if existing:
+            conn.close()
+            raise ValueError("Email already registered")
+        
+        user_id = str(uuid.uuid4())
+        hashed = hash_password(password)
+        
+        cur.execute(
+            "INSERT INTO local_users (id, name, email, hashed_password, role) VALUES (%s, %s, %s, %s, %s)",
+            (user_id, name.strip(), email.lower().strip(), hashed, role),
+        )
     
-    user_id = str(uuid.uuid4())
-    hashed = hash_password(password)
-    
-    conn.execute(
-        "INSERT INTO local_users (id, name, email, hashed_password, role) VALUES (?, ?, ?, ?, ?)",
-        (user_id, name.strip(), email.lower().strip(), hashed, role),
-    )
     conn.commit()
     conn.close()
     
@@ -120,10 +134,12 @@ def register_user(name: str, email: str, password: str, role: str) -> dict:
 def login_user(email: str, password: str) -> Optional[dict]:
     """Authenticate a user. Returns user dict or None."""
     conn = _get_conn()
-    row = conn.execute(
-        "SELECT id, name, email, hashed_password, role FROM local_users WHERE email = ?",
-        (email.lower().strip(),),
-    ).fetchone()
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute(
+            "SELECT id, name, email, hashed_password, role FROM local_users WHERE email = %s",
+            (email.lower().strip(),),
+        )
+        row = cur.fetchone()
     conn.close()
     
     if not row:
@@ -142,9 +158,11 @@ def login_user(email: str, password: str) -> Optional[dict]:
 
 def get_user_by_id(user_id: str) -> Optional[dict]:
     conn = _get_conn()
-    row = conn.execute(
-        "SELECT id, name, email, role FROM local_users WHERE id = ?", (user_id,)
-    ).fetchone()
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute(
+            "SELECT id, name, email, role FROM local_users WHERE id = %s", (user_id,)
+        )
+        row = cur.fetchone()
     conn.close()
     if not row:
         return None
