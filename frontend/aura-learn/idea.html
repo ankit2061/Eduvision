@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EduVoice — Complete Feature & Flow Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #f7f4ef;
+  --surface: #ffffff;
+  --surface2: #f0ece4;
+  --border: #e0d9ce;
+  --ink: #1a1612;
+  --ink2: #4a4540;
+  --ink3: #8a8278;
+  --accent: #c84b2f;
+  --accent2: #2d6a8f;
+  --accent3: #2a7a4b;
+  --accent4: #7c4abf;
+  --accent5: #c97d18;
+  --teacher-clr: #2d6a8f;
+  --student-clr: #2a7a4b;
+  --disabled-clr: #7c4abf;
+  --flow-clr: #c84b2f;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+/* HEADER */
+header {
+  background: var(--ink);
+  color: var(--bg);
+  padding: 60px 40px 50px;
+  position: relative;
+  overflow: hidden;
+}
+header::after {
+  content: 'EduVoice';
+  position: absolute;
+  right: -20px; bottom: -40px;
+  font-family: 'Fraunces', serif;
+  font-size: 160px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.04);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.header-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 700;
+  line-height: 1.05;
+  max-width: 700px;
+}
+h1 em { color: var(--accent); font-style: italic; }
+.header-sub {
+  margin-top: 18px;
+  font-size: 16px;
+  color: rgba(247,244,239,0.6);
+  max-width: 580px;
+  line-height: 1.6;
+}
+
+/* LAYOUT */
+.wrap { max-width: 1020px; margin: 0 auto; padding: 0 32px; }
+
+/* TOC */
+.toc-section {
+  background: var(--ink);
+  color: var(--bg);
+  padding: 0 0 40px;
+}
+.toc-grid {
+  max-width: 1020px;
+  margin: 0 auto;
+  padding: 32px 32px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px 24px;
+}
+.toc-heading {
+  grid-column: 1/-1;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink3);
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 8px;
+}
+.toc a {
+  display: flex; align-items: baseline; gap: 10px;
+  color: rgba(247,244,239,0.75);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: color .15s;
+}
+.toc a:hover { color: var(--accent); }
+.toc-n {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  min-width: 20px;
+}
+
+/* SECTIONS */
+section { padding: 56px 0; border-bottom: 1px solid var(--border); }
+section:last-child { border-bottom: none; }
+
+.sec-eyebrow {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 10px;
+}
+.sec-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 3px 10px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+}
+.sec-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink3);
+}
+h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 20px;
+}
+h2 .accent { color: var(--accent); }
+h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 32px 0 12px;
+  color: var(--ink);
+}
+h4 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin: 24px 0 10px;
+}
+p { margin-bottom: 14px; color: var(--ink2); }
+strong { color: var(--ink); font-weight: 600; }
+
+/* INTRO CARDS */
+.intro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+.intro-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+}
+.intro-card-icon { font-size: 28px; margin-bottom: 12px; }
+.intro-card-title {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.intro-card p { font-size: 13px; margin: 0; }
+
+/* FLOW DIAGRAM */
+.flow-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  margin: 20px 0;
+  overflow-x: auto;
+}
+.flow-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 24px;
+}
+.flow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  min-width: 600px;
+  flex-wrap: nowrap;
+}
+.flow-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.flow-step::after {
+  content: '→';
+  position: absolute;
+  right: -14px;
+  top: 18px;
+  font-size: 18px;
+  color: var(--border);
+  z-index: 1;
+}
+.flow-step:last-child::after { display: none; }
+.flow-box {
+  width: 100%;
+  padding: 12px 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.flow-sub {
+  font-size: 10px;
+  color: var(--ink3);
+  text-align: center;
+  margin-top: 6px;
+  padding: 0 4px;
+  line-height: 1.4;
+}
+.fc-teacher { background: rgba(45,106,143,0.12); border: 1px solid rgba(45,106,143,0.3); color: #1a4f70; }
+.fc-ai      { background: rgba(200,75,47,0.10);  border: 1px solid rgba(200,75,47,0.3);  color: #8f2a10; }
+.fc-student { background: rgba(42,122,75,0.10);  border: 1px solid rgba(42,122,75,0.3);  color: #1a5c35; }
+.fc-data    { background: rgba(124,74,191,0.10); border: 1px solid rgba(124,74,191,0.3); color: #4a1c8f; }
+.fc-output  { background: rgba(201,125,24,0.10); border: 1px solid rgba(201,125,24,0.3); color: #7a4500; }
+
+/* VERTICAL FLOW */
+.vflow { margin: 20px 0; }
+.vflow-row {
+  display: flex;
+  gap: 0;
+  margin-bottom: 4px;
+  align-items: stretch;
+}
+.vflow-line {
+  display: flex;
+  justify-content: center;
+  padding-left: 24px;
+  margin-bottom: 4px;
+}
+.vflow-line::before { content: '↓'; color: var(--border); font-size: 18px; }
+.vflow-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  min-width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 4px;
+  margin-right: 14px;
+}
+.vflow-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  flex: 1;
+}
+.vflow-content-title {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+.vflow-content p { font-size: 13px; margin: 0; color: var(--ink2); }
+
+/* FEATURE CARDS */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+.feature-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+}
+.fc-t::before { background: var(--teacher-clr); }
+.fc-s::before { background: var(--student-clr); }
+.fc-d::before { background: var(--disabled-clr); }
+.fc-b::before { background: var(--accent5); }
+.feature-card-title {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.feature-card p { font-size: 13px; margin: 0; color: var(--ink2); }
+.feature-card ul { padding-left: 16px; margin-top: 8px; }
+.feature-card ul li { font-size: 13px; color: var(--ink2); margin-bottom: 4px; }
+
+/* TAG */
+.tag {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin: 2px 2px 8px 0;
+  text-transform: uppercase;
+}
+.tag-t { background: rgba(45,106,143,0.12); color: var(--teacher-clr); }
+.tag-s { background: rgba(42,122,75,0.12);  color: var(--student-clr); }
+.tag-d { background: rgba(124,74,191,0.12); color: var(--disabled-clr); }
+.tag-r { background: rgba(200,75,47,0.12);  color: var(--accent); }
+.tag-a { background: rgba(201,125,24,0.12); color: var(--accent5); }
+
+/* DISABILITY TABLE */
+.dis-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 16px 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.dis-table th {
+  background: var(--ink);
+  color: var(--bg);
+  padding: 11px 16px;
+  text-align: left;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.dis-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.dis-table tr:last-child td { border-bottom: none; }
+.dis-table tr:nth-child(even) td { background: var(--surface2); }
+.dis-name { font-weight: 600; color: var(--ink); font-size: 13px; }
+
+/* CALLOUT */
+.callout {
+  display: flex; gap: 14px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  margin: 18px 0;
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+.callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.callout.note { background: rgba(45,106,143,0.08); border: 1px solid rgba(45,106,143,0.25); }
+.callout.tip  { background: rgba(42,122,75,0.08);  border: 1px solid rgba(42,122,75,0.25); }
+.callout.warn { background: rgba(200,75,47,0.08);  border: 1px solid rgba(200,75,47,0.25); }
+.callout.key  { background: rgba(201,125,24,0.08); border: 1px solid rgba(201,125,24,0.25); }
+
+/* ROLE SPLIT */
+.role-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 20px 0;
+}
+@media(max-width:640px){ .role-split { grid-template-columns: 1fr; } }
+.role-col {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+}
+.role-col-title {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.role-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-t { background: var(--teacher-clr); }
+.dot-s { background: var(--student-clr); }
+.dot-d { background: var(--disabled-clr); }
+
+/* STEP LIST */
+.steplist { list-style: none; margin: 14px 0; }
+.steplist li {
+  display: flex; gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+  color: var(--ink2);
+}
+.steplist li:last-child { border-bottom: none; }
+.step-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  min-width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink3);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* API TABLE */
+.api-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 16px 0;
+}
+.api-table th {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 9px 14px;
+  text-align: left;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink3);
+}
+.api-table td {
+  border: 1px solid var(--border);
+  padding: 9px 14px;
+  vertical-align: top;
+}
+.api-table tr:nth-child(even) td { background: var(--surface2); }
+.mono { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--accent2); }
+.method-post { color: var(--accent3); font-family:'DM Mono',monospace; font-size:11px; font-weight:600; }
+.method-get  { color: var(--accent2); font-family:'DM Mono',monospace; font-size:11px; font-weight:600; }
+
+/* PROMPT BOX */
+.prompt-box {
+  background: var(--ink);
+  color: #d4cfc7;
+  border-radius: 12px;
+  padding: 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  margin: 14px 0 20px;
+  position: relative;
+  overflow: hidden;
+}
+.prompt-label {
+  position: absolute;
+  top: 12px; right: 16px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.p-cm   { color: #5c7a5c; }
+.p-var  { color: #c8a96e; }
+.p-str  { color: #8abf8a; }
+.p-key  { color: #7ab0cf; }
+
+/* TIMELINE */
+.timeline { position: relative; padding-left: 40px; margin: 20px 0; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 12px; top: 10px; bottom: 10px;
+  width: 2px;
+  background: var(--border);
+}
+.tl-item {
+  position: relative;
+  margin-bottom: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -34px; top: 18px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--ink);
+}
+.tl-time {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.tl-title { font-weight: 600; font-size: 15px; margin-bottom: 6px; }
+.tl-body  { font-size: 13px; color: var(--ink2); }
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 8px 0; }
+
+/* FOOTER */
+footer {
+  background: var(--ink);
+  color: rgba(247,244,239,0.5);
+  text-align: center;
+  padding: 32px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+ul { padding-left: 18px; }
+ul li { margin-bottom: 5px; font-size: 14px; color: var(--ink2); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">Hackathon Build Guide · Complete Edition</div>
+  <h1>EduVoice —<br/><em>Inclusive Classroom</em><br/>Platform</h1>
+  <p class="header-sub">Every feature, every user journey, every high-level flow. Built for a 2-person team using Gemini, ElevenLabs, Snowflake, Auth0, and DigitalOcean.</p>
+</header>
+
+<!-- TOC -->
+<div class="toc-section">
+  <div class="toc-grid toc">
+    <div class="toc-heading">Contents</div>
+    <a href="#s1"><span class="toc-n">01</span>Vision & Problem Statement</a>
+    <a href="#s2"><span class="toc-n">02</span>User Roles Overview</a>
+    <a href="#s3"><span class="toc-n">03</span>Onboarding Flows</a>
+    <a href="#s4"><span class="toc-n">04</span>Teacher (Normally Abled) — Full Feature Set</a>
+    <a href="#s5"><span class="toc-n">05</span>Teacher (Specially Abled) — Full Feature Set</a>
+    <a href="#s6"><span class="toc-n">06</span>Content Conversion Engine</a>
+    <a href="#s7"><span class="toc-n">07</span>Student Features — All Disability Types</a>
+    <a href="#s8"><span class="toc-n">08</span>Tests & Assignments — Adaptive System</a>
+    <a href="#s9"><span class="toc-n">09</span>Live Class Feature</a>
+    <a href="#s10"><span class="toc-n">10</span>Disability-Specific Adaptations (Full Table)</a>
+    <a href="#s11"><span class="toc-n">11</span>API Contracts</a>
+    <a href="#s12"><span class="toc-n">12</span>Gemini Prompt Templates</a>
+    <a href="#s13"><span class="toc-n">13</span>Snowflake Data Model</a>
+    <a href="#s14"><span class="toc-n">14</span>48-Hour Build Timeline</a>
+    <a href="#s15"><span class="toc-n">15</span>Demo Script</a>
+  </div>
+</div>
+
+<!-- S1: VISION -->
+<section id="s1">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">01</span><span class="sec-tag">Foundation</span></div>
+  <h2>Vision & <span class="accent">Problem Statement</span></h2>
+
+  <p>Every classroom in India has students with varied learning abilities — from visual learners and auditory learners to students with blindness, deafness, autism, dyslexia, stammering, ADHD, and physical disabilities. Yet <strong>all content is prepared in one format</strong>, designed for one kind of student.</p>
+
+  <p>Teachers who want to create inclusive content for all their students spend an additional <strong>8–10 hours per week</strong> manually converting lessons. Given their already packed schedules, this is simply not sustainable. The result: students with disabilities are left behind, not because teachers don't care, but because the system doesn't help.</p>
+
+  <p><strong>EduVoice solves this</strong> by being the invisible bridge between any content a teacher creates and any format a student needs. The teacher creates once. The platform delivers to everyone.</p>
+
+  <div class="intro-grid">
+    <div class="intro-card">
+      <div class="intro-card-icon">🧑‍🏫</div>
+      <div class="intro-card-title">For Every Teacher</div>
+      <p>Normally abled or specially abled — the platform adapts to how the teacher works, whether they type, speak, or upload video.</p>
+    </div>
+    <div class="intro-card">
+      <div class="intro-card-icon">🎓</div>
+      <div class="intro-card-title">For Every Student</div>
+      <p>Content, tests, and assignments are automatically adapted to each student's disability profile and learning style — visual, auditory, or otherwise.</p>
+    </div>
+    <div class="intro-card">
+      <div class="intro-card-icon">⚡</div>
+      <div class="intro-card-title">Saves 8–10 Hours/Week</div>
+      <p>What would take a teacher nearly a full extra working day is done in seconds by the AI conversion engine.</p>
+    </div>
+    <div class="intro-card">
+      <div class="intro-card-icon">🇮🇳</div>
+      <div class="intro-card-title">Built for India</div>
+      <p>Aligned with NEP 2020 and PM eVIDYA inclusive education goals. Supports multilingual content generation and Indian Sign Language (ISL).</p>
+    </div>
+  </div>
+
+  <div class="callout key">
+    <span class="callout-icon">🔑</span>
+    <div><strong>Core Principle:</strong> The student's disability profile and learning style are collected at admission and during orientation (outside the scope of this product). EduVoice receives these as inputs and takes care of everything from that point forward. The teacher never has to think about formats again.</div>
+  </div>
+</div>
+</section>
+
+<!-- S2: USER ROLES -->
+<section id="s2">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">02</span><span class="sec-tag">Roles</span></div>
+  <h2>User <span class="accent">Roles Overview</span></h2>
+
+  <div class="role-split">
+    <div class="role-col">
+      <div class="role-col-title"><span class="role-dot dot-t"></span>Teachers</div>
+      <ul>
+        <li><strong>Normally Abled Teacher</strong> — creates written, audio, or video content; EduVoice converts it to all needed formats automatically</li>
+        <li><strong>Specially Abled Teacher</strong> — uses a voice-first, disability-aware interface where the app itself adapts to the teacher's declared disability</li>
+      </ul>
+    </div>
+    <div class="role-col">
+      <div class="role-col-title"><span class="role-dot dot-s"></span>Students</div>
+      <ul>
+        <li><strong>Normally Abled Student</strong> — accesses content in preferred learning style (visual, auditory, reading/writing, kinesthetic)</li>
+        <li><strong>Divyangjan Student</strong> — accesses all content, tests, and assignments in formats specifically adapted to their disability type</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="role-col" style="margin-top:0;">
+    <div class="role-col-title"><span class="role-dot dot-d"></span>Admin / Institution</div>
+    <p style="font-size:13px; color:var(--ink2);">Manages the school or college on the platform. Uploads student disability profiles and learning style data collected at admission. Assigns students to classes and teachers. Views institution-wide inclusivity analytics. This is the data source that feeds EduVoice's personalization engine.</p>
+  </div>
+</div>
+</section>
+
+<!-- S3: ONBOARDING -->
+<section id="s3">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">03</span><span class="sec-tag">First-Time Setup</span></div>
+  <h2>Onboarding <span class="accent">Flows</span></h2>
+
+  <h3>Teacher Onboarding</h3>
+  <div class="flow-wrap">
+    <div class="flow-title">Step-by-Step: Teacher First Login</div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-box fc-teacher">Auth0 Login<br/>+ Role Select</div>
+        <div class="flow-sub">Choose "I am a teacher"</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-teacher">Are You<br/>Specially Abled?</div>
+        <div class="flow-sub">Yes / No branch</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-ai">Declare<br/>Disability Type</div>
+        <div class="flow-sub">If yes — picks from list</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-teacher">UI Adapts<br/>Immediately</div>
+        <div class="flow-sub">Voice-first or other mode</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-output">Link to<br/>Your Classes</div>
+        <div class="flow-sub">Classes created by admin</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-output">Dashboard<br/>Ready</div>
+        <div class="flow-sub">See class profiles</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Student Onboarding</h3>
+  <div class="flow-wrap">
+    <div class="flow-title">Step-by-Step: Student First Login</div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-box fc-student">Auth0 Login<br/>+ Role Select</div>
+        <div class="flow-sub">Choose "I am a student"</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-data">Profile Loaded<br/>from Admin</div>
+        <div class="flow-sub">Disability + learning style already set</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-student">Confirm &<br/>Customise</div>
+        <div class="flow-sub">Adjust font, speed, contrast, AAC</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-ai">Accessibility<br/>Mode Activated</div>
+        <div class="flow-sub">All content pre-converted</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-output">Student<br/>Dashboard</div>
+        <div class="flow-sub">See lessons, tests, assignments</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout note">
+    <span class="callout-icon">ℹ️</span>
+    <div>The student's disability profile and learning preference data is uploaded by the institution's admin during the admission process. EduVoice does <strong>not</strong> collect or test for these — it only consumes them. This is a critical scope boundary to keep the product focused.</div>
+  </div>
+</div>
+</section>
+
+<!-- S4: TEACHER NORMALLY ABLED -->
+<section id="s4">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">04</span><span class="sec-tag">Teacher Features</span></div>
+  <h2>Teacher (Normally Abled) — <span class="accent">Full Feature Set</span></h2>
+
+  <p>A normally abled teacher interacts with EduVoice through a standard interface. Their primary job is to create content in any form they prefer — and EduVoice does the heavy lifting of adapting it for every student in the class.</p>
+
+  <h3>Content Creation — Written Material</h3>
+  <div class="vflow">
+    <div class="vflow-row">
+      <div class="vflow-num">1</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Teacher types or pastes written content</div>
+        <p>Could be a lesson explanation, a chapter summary, a concept note, or any text-based material. Supports markdown and rich text formatting.</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">2</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Teacher selects target class</div>
+        <p>The class roster (with each student's disability/learning profile) is already loaded from the admin. EduVoice knows exactly what formats are needed.</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">3</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">AI Conversion Engine runs automatically</div>
+        <p>Gemini processes the content and generates: simplified version (for low-comprehension students), grade-level version, advanced version, audio narration (ElevenLabs), large-print version, dyslexia-friendly formatted version, high-contrast version, and a sign language keyword map for visually supported reading.</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">4</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Teacher previews and publishes</div>
+        <p>Teacher sees a preview of the content across formats. Can make edits before publishing. One click publishes to the entire class — each student automatically receives their adapted version.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Content Creation — Audio Material</h3>
+  <p>If the teacher prefers to speak instead of type, EduVoice supports audio-first content creation equally.</p>
+  <div class="vflow">
+    <div class="vflow-row">
+      <div class="vflow-num">1</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Teacher records or uploads an audio file</div>
+        <p>Can record live in the app using a microphone, or upload a pre-recorded .mp3/.wav file. This is especially useful for language classes or explanation-heavy topics.</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">2</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Audio is transcribed by Gemini</div>
+        <p>The audio is converted to text using speech-to-text. This transcript becomes the master content for all further conversions.</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">3</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Same conversion engine as written material runs</div>
+        <p>All formats are generated identically to the written material flow. For hearing-impaired students, the transcript itself becomes the primary content, with captions and sign keyword overlays added.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Content Creation — Video Material</h3>
+  <div class="vflow">
+    <div class="vflow-row">
+      <div class="vflow-num">1</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Teacher uploads a video or records screen + webcam</div>
+        <p>EduVoice accepts video uploads. The app can also generate a simple screen recording interface for teacher explainer videos.</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">2</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Video is processed for accessibility</div>
+        <p>Auto-captions are generated and overlaid for hearing-impaired students. The audio track is extracted and transcribed. The transcript is converted to all written formats. A sign language keyword panel is generated alongside the video player for deaf students.</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">3</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Blind/low-vision students get an audio-described version</div>
+        <p>Gemini generates a rich audio description of any visual elements in the video. ElevenLabs narrates it. This is served alongside the video as an "audio description track."</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Other Teacher Features</h3>
+  <div class="feature-grid">
+    <div class="feature-card fc-t">
+      <span class="tag tag-t">Content Library</span>
+      <div class="feature-card-title">Reusable Content Repository</div>
+      <p>All content created by the teacher is saved in a personal library. Can be reused, duplicated, or reassigned to different classes without re-generating.</p>
+    </div>
+    <div class="feature-card fc-t">
+      <span class="tag tag-t">Test Builder</span>
+      <div class="feature-card-title">Adaptive Test Creation</div>
+      <p>Teacher creates a standard test. EduVoice automatically generates adapted versions for each disability type in the class. Full details in Section 08.</p>
+    </div>
+    <div class="feature-card fc-t">
+      <span class="tag tag-t">Assignments</span>
+      <div class="feature-card-title">Adaptive Assignment Creator</div>
+      <p>Same as tests — teacher creates one assignment, the platform generates accessible variants for every student profile automatically.</p>
+    </div>
+    <div class="feature-card fc-t">
+      <span class="tag tag-t">Live Class</span>
+      <div class="feature-card-title">Inclusive Live Session</div>
+      <p>Teacher conducts a live class. Real-time captions, sign language panel, and screen reader narration are active simultaneously. Full details in Section 09.</p>
+    </div>
+    <div class="feature-card fc-t">
+      <span class="tag tag-t">Analytics</span>
+      <div class="feature-card-title">Inclusivity Dashboard</div>
+      <p>See class-wide performance. Drill down by disability type. See which accessibility features are improving scores. Powered by Snowflake VARIANT queries.</p>
+    </div>
+    <div class="feature-card fc-t">
+      <span class="tag tag-t">Feedback</span>
+      <div class="feature-card-title">Student Progress Alerts</div>
+      <p>Get notified when a specific student is consistently struggling. The system identifies patterns across sessions and surfaces them to the teacher.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- S5: SPECIALLY ABLED TEACHER -->
+<section id="s5">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">05</span><span class="sec-tag">Specially Abled Teacher</span></div>
+  <h2>Teacher (Specially Abled) — <span class="accent">Full Feature Set</span></h2>
+
+  <p>EduVoice does not just serve specially abled students. A teacher with a disability deserves an equally accessible teaching experience. The application is <strong>voice-first</strong> by design — meaning every action that can be done by typing or clicking can also be done by speaking.</p>
+
+  <div class="callout tip">
+    <span class="callout-icon">💡</span>
+    <div>At onboarding, the specially abled teacher declares their disability type. From that point forward, the entire teacher interface reconfigures to support their needs. They can update this profile at any time.</div>
+  </div>
+
+  <h3>By Disability Type — Teacher Interface Adaptations</h3>
+
+  <table class="dis-table">
+    <thead>
+      <tr>
+        <th>Teacher Disability</th>
+        <th>Interface Changes</th>
+        <th>Content Creation Adaptation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="dis-name">Visual Impairment / Blindness</span></td>
+        <td>Fully screen-reader compatible UI with ARIA labels throughout. All buttons and navigation operable by keyboard and voice commands. High-contrast or dark mode activated by default.</td>
+        <td>Teacher dictates content entirely by voice. ElevenLabs reads back every action and generated content for confirmation. Gemini transcribes dictation into structured lesson content.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Hearing Impairment / Deafness</span></td>
+        <td>All audio feedback replaced with visual notifications, vibrations (on mobile), and large on-screen text confirmations. No audio-dependent workflows anywhere in the teacher UI.</td>
+        <td>Teacher uses typed or video content only. All system responses and AI feedback are in text. Sign language video option available for creating sign-language-native lesson content.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Motor Disability / Limited Mobility</span></td>
+        <td>Voice-command navigation for all actions. Switch access compatible. Large touch targets on mobile. Dictation mode for all text input fields. Minimal required interactions per task.</td>
+        <td>Entire lesson can be created by voice dictation alone. Teacher says "create a lesson on photosynthesis for grade 8" and EduVoice handles everything, reading results back aloud.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Speech Impairment (Stammering / Dysarthria)</span></td>
+        <td>Voice recognition configured to handle non-fluent speech — tolerates pauses, repetitions, and slower pace. Extended dictation timeout. Option to switch to typed input at any point.</td>
+        <td>Dictation engine uses Gemini's stammer-friendly mode to reconstruct intended sentences from fragmented speech. Teacher reviews and confirms before publishing.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Low Vision</span></td>
+        <td>Adjustable font size slider (up to 3×). High contrast mode. Zoom-friendly layout with no information lost at 200% zoom. Dyslexia-friendly font option.</td>
+        <td>Standard creation workflow with enlarged UI. All generated content previews use the teacher's font size settings.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Cognitive / Learning Disability</span></td>
+        <td>Simplified UI mode — reduces number of visible options at once. Step-by-step guided workflow with one action per screen. Progress saved automatically at each step.</td>
+        <td>AI auto-suggests next steps. Fewer decisions required — the app makes sensible defaults and asks only critical questions.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Voice-First Teacher Flow (Primary Design)</h3>
+  <div class="flow-wrap">
+    <div class="flow-title">How a Blind Teacher Creates and Publishes a Lesson by Voice Alone</div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-box fc-teacher">Teacher says:<br/>"New lesson"</div>
+        <div class="flow-sub">Voice command triggers lesson creation</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-teacher">EduVoice asks for topic &amp; grade by voice</div>
+        <div class="flow-sub">TTS prompts, STT captures answer</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-teacher">Teacher dictates full lesson content</div>
+        <div class="flow-sub">Gemini transcribes + structures</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-ai">EduVoice reads back generated content</div>
+        <div class="flow-sub">ElevenLabs narrates for confirmation</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-teacher">Teacher approves by saying "Publish"</div>
+        <div class="flow-sub">Or says "Edit section 2"</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-box fc-output">Lesson published<br/>to all students</div>
+        <div class="flow-sub">Zero keyboard or screen interaction needed</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- S6: CONVERSION ENGINE -->
+<section id="s6">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">06</span><span class="sec-tag">Core Engine</span></div>
+  <h2>Content <span class="accent">Conversion Engine</span></h2>
+
+  <p>This is the heart of EduVoice. When a teacher publishes content, the conversion engine runs in the background and produces a personalised output for every student profile in the class.</p>
+
+  <div class="flow-wrap">
+    <div class="flow-title">Master Conversion Pipeline — Runs Once Per Lesson Published</div>
+    <div class="vflow" style="margin:0;">
+      <div class="vflow-row">
+        <div class="vflow-num">1</div>
+        <div class="vflow-content">
+          <div class="vflow-content-title">Input: Raw Content from Teacher</div>
+          <p>Written text, audio recording, or video — in any combination. The engine accepts all three and normalises them to a unified text transcript first.</p>
+        </div>
+      </div>
+      <div class="vflow-line"></div>
+      <div class="vflow-row">
+        <div class="vflow-num">2</div>
+        <div class="vflow-content">
+          <div class="vflow-content-title">Class Profile Analysis</div>
+          <p>The engine reads the disability and learning style profile of every student in the class from Snowflake. It determines the unique set of output formats needed. For example: if the class has 2 blind students, 1 deaf student, 3 dyslexic students, and 5 visual learners — it queues exactly those output formats and no others.</p>
+        </div>
+      </div>
+      <div class="vflow-line"></div>
+      <div class="vflow-row">
+        <div class="vflow-num">3</div>
+        <div class="vflow-content">
+          <div class="vflow-content-title">Parallel Generation via Gemini</div>
+          <p>Gemini generates all text-based variants simultaneously: simplified reading level, grade-level, advanced level, dyslexia-reformatted layout, structured summary for autistic students (clear bullet points, no ambiguous language), visual description layer for blind students, simplified vocabulary version for intellectual disabilities.</p>
+        </div>
+      </div>
+      <div class="vflow-line"></div>
+      <div class="vflow-row">
+        <div class="vflow-num">4</div>
+        <div class="vflow-content">
+          <div class="vflow-content-title">Audio Generation via ElevenLabs</div>
+          <p>For every student who needs audio: a narrated version is generated at their preferred speaking speed. Slower pace for students who need more processing time. The blind student gets a full audio description version including descriptions of any diagrams or images referenced.</p>
+        </div>
+      </div>
+      <div class="vflow-line"></div>
+      <div class="vflow-row">
+        <div class="vflow-num">5</div>
+        <div class="vflow-content">
+          <div class="vflow-content-title">Sign Language Keyword Map</div>
+          <p>Key vocabulary words in the lesson are extracted and mapped to Indian Sign Language (ISL) GIF/video clips. These appear as hover overlays for deaf students when they tap a highlighted word while reading.</p>
+        </div>
+      </div>
+      <div class="vflow-line"></div>
+      <div class="vflow-row">
+        <div class="vflow-num">6</div>
+        <div class="vflow-content">
+          <div class="vflow-content-title">Storage in Snowflake + DigitalOcean Spaces</div>
+          <p>All generated variants are stored. Text and metadata go into Snowflake VARIANT columns. Audio and video files are stored in DigitalOcean Spaces. Each student's profile is linked to their specific variant — so when they open the lesson, they always get their version.</p>
+        </div>
+      </div>
+      <div class="vflow-line"></div>
+      <div class="vflow-row">
+        <div class="vflow-num">7</div>
+        <div class="vflow-content">
+          <div class="vflow-content-title">Delivery to Student</div>
+          <p>When the student opens the lesson, the app fetches their personalised variant. No filtering or selection needed from the student's side — it just works. They see exactly the right format for them.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Output Format Matrix</h3>
+  <table class="dis-table">
+    <thead>
+      <tr><th>Student Profile</th><th>Written Format</th><th>Audio</th><th>Visual</th><th>Interaction</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="dis-name">Visual Learner</span></td>
+        <td>Standard text with diagrams, infographics, colour highlights</td>
+        <td>Optional</td>
+        <td>Rich diagrams, concept maps</td>
+        <td>Standard</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Auditory Learner</span></td>
+        <td>Minimal — key points only</td>
+        <td>Full narration at natural speed (ElevenLabs)</td>
+        <td>Minimal</td>
+        <td>Audio-guided navigation</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Blind / Low Vision</span></td>
+        <td>Screen-reader-ready HTML, no visual-only content</td>
+        <td>Full audio description of ALL content including images</td>
+        <td>None required</td>
+        <td>Keyboard + voice commands only</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Deaf / Hard of Hearing</span></td>
+        <td>Full transcript, large font, captions always on</td>
+        <td>None required</td>
+        <td>ISL keyword GIF overlays on vocabulary words</td>
+        <td>Visual-only alerts</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Dyslexia</span></td>
+        <td>OpenDyslexic font, extra spacing, bionic reading, focus line</td>
+        <td>Synchronized read-aloud while text is highlighted word by word</td>
+        <td>Simplified colour scheme, no clutter</td>
+        <td>Standard with enlarged touch targets</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">ADHD</span></td>
+        <td>Chunked into very short sections (max 3–4 sentences), one chunk at a time</td>
+        <td>Short-burst audio per chunk</td>
+        <td>Minimal — no animations or distractions</td>
+        <td>Progress tracking, micro-rewards per section</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Autism Spectrum</span></td>
+        <td>Clear, literal language — no idioms or ambiguity. Bullet points. Predictable structure.</td>
+        <td>Calm, measured narration</td>
+        <td>Sensory-safe colours, no sudden visual changes</td>
+        <td>Highly predictable, no surprises</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Intellectual Disability</span></td>
+        <td>Simplified vocabulary, very short sentences, illustrated with simple icons</td>
+        <td>Slow narration, repeat option</td>
+        <td>Simple icons alongside each concept</td>
+        <td>Guided step-by-step, no open-ended tasks</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Physical / Motor Disability</span></td>
+        <td>Standard content</td>
+        <td>Standard audio</td>
+        <td>Standard visual</td>
+        <td>Full voice navigation, switch access, no time-pressured interactions</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</section>
+
+<!-- S7: STUDENT FEATURES -->
+<section id="s7">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">07</span><span class="sec-tag">Student Experience</span></div>
+  <h2>Student Features — <span class="accent">All Profiles</span></h2>
+
+  <h3>Student Dashboard</h3>
+  <p>The student dashboard is the same page for everyone but renders differently based on each student's accessibility profile. A blind student's dashboard is voice-navigable with no visual-only elements. A deaf student's dashboard has no audio alerts — only visual ones. An autistic student's dashboard has no gamification pop-ups and a fixed, predictable layout that never changes.</p>
+
+  <h3>Accessing Lessons</h3>
+  <div class="vflow">
+    <div class="vflow-row">
+      <div class="vflow-num">1</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Student opens a lesson</div>
+        <p>Their personalised variant loads automatically. No format selection needed.</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">2</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Accessibility panel (persistent, always accessible)</div>
+        <p>A floating accessibility panel allows fine-tuning at any time: font size, contrast, reading speed, audio on/off, captions on/off, sensory mode, dyslexia font toggle. Changes are remembered across sessions.</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">3</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Synchronised read-aloud (for dyslexia / visual learners)</div>
+        <p>The lesson text highlights word-by-word as ElevenLabs narrates. The student can pause, rewind, and adjust speed. Each highlighted word can be tapped to hear it in isolation.</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">4</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Sign language overlay (for deaf students)</div>
+        <p>Highlighted vocabulary words show an ISL GIF when tapped or hovered. A sidebar shows the ISL clip for the current sentence being read.</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">5</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">AAC Mode (for non-verbal students)</div>
+        <p>A floating AAC phrase grid is available at all times. Tapping any phrase speaks it aloud in the classroom via ElevenLabs, allowing non-verbal students to participate in real-time. They can also type free text and have it spoken.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Live Class Attendance</h3>
+  <p>When the teacher conducts a live class, every student joins the same session but sees and hears it differently based on their profile. Full details in Section 09.</p>
+
+  <h3>Practice Mode (English / Communication)</h3>
+  <p>Students who want to practice spoken English or communication skills can use the AI voice coach. This adapts based on the student's profile — a student with a stammer gets a stammer-friendly coach that ignores pauses and judges only content. A deaf student gets a visual-only feedback interface with no speaking required.</p>
+
+  <div class="feature-grid">
+    <div class="feature-card fc-s">
+      <span class="tag tag-s">Practice</span>
+      <div class="feature-card-title">Read-Aloud with Feedback</div>
+      <p>Student reads a passage aloud. Gemini analyses pronunciation, grammar, fluency. Word-level colour heatmap shows which words need work.</p>
+    </div>
+    <div class="feature-card fc-s">
+      <span class="tag tag-s">Practice</span>
+      <div class="feature-card-title">Mock Interview</div>
+      <p>AI interviewer asks questions, student answers. Conversational flow with turn-by-turn feedback. Pacing adjustable for different disability profiles.</p>
+    </div>
+    <div class="feature-card fc-s">
+      <span class="tag tag-s">Accessibility</span>
+      <div class="feature-card-title">AAC Classroom Voice</div>
+      <p>Non-verbal students can speak in class through EduVoice. Type or select phrases → ElevenLabs voices them aloud.</p>
+    </div>
+    <div class="feature-card fc-s">
+      <span class="tag tag-s">Progress</span>
+      <div class="feature-card-title">Personal Progress Tracker</div>
+      <p>Student sees their own scores over time, which accessibility tools they are using, and personalised suggestions for improvement. No comparison with others — fully individual.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- S8: TESTS AND ASSIGNMENTS -->
+<section id="s8">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">08</span><span class="sec-tag">Assessment</span></div>
+  <h2>Tests & Assignments — <span class="accent">Adaptive System</span></h2>
+
+  <p>Tests and assignments are one of the most critical areas for inclusion. The same knowledge must be assessed — but the <strong>format of the assessment must not disadvantage a student due to their disability</strong>. EduVoice automates this completely.</p>
+
+  <h3>How It Works — Teacher Side</h3>
+  <div class="vflow">
+    <div class="vflow-row">
+      <div class="vflow-num">1</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Teacher creates a standard test</div>
+        <p>Teacher writes questions normally — multiple choice, short answer, long answer, match the following, or fill in the blanks. This is the "master test."</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">2</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">AI generates adapted variants for every disability profile in the class</div>
+        <p>This happens automatically. The teacher doesn't need to do anything extra. The engine produces as many variants as there are distinct profiles in the class.</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">3</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Teacher sets the due date and publishes</div>
+        <p>Each student automatically gets their adapted version when they open the test. Same deadline, same knowledge assessed, different format.</p>
+      </div>
+    </div>
+    <div class="vflow-line"></div>
+    <div class="vflow-row">
+      <div class="vflow-num">4</div>
+      <div class="vflow-content">
+        <div class="vflow-content-title">Teacher reviews all submissions in a unified view</div>
+        <p>The teacher sees all answers in a standardised format regardless of how each student submitted (voice, typed, MCQ, drawing). Gemini normalises and evaluates, presenting the teacher with scores and the original answer for review.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Test Format by Disability Type</h3>
+  <table class="dis-table">
+    <thead>
+      <tr><th>Disability</th><th>Question Format Adaptation</th><th>Answer Input Mode</th><th>UI Changes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="dis-name">Blindness</span></td>
+        <td>All visual question elements (diagrams, images) replaced with detailed text descriptions generated by Gemini</td>
+        <td>Voice dictation only — student speaks answers, Gemini transcribes</td>
+        <td>Screen reader compatible, no visual-only elements</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Deafness</span></td>
+        <td>Any audio-based questions converted to text/visual format</td>
+        <td>Text typing or ISL video submission (camera)</td>
+        <td>All instructions in text, no audio alerts</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Autism Spectrum</span></td>
+        <td>Questions rewritten in literal, unambiguous language. No idioms. One concept per question. Clear formatting with no visual noise.</td>
+        <td>MCQ preferred (reduces open-ended anxiety). Short typed answers.</td>
+        <td>Fixed layout, no popups, sensory-safe colours, no timer displayed</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">ADHD</span></td>
+        <td>One question shown at a time. No scrolling. Chunked layout.</td>
+        <td>Standard — MCQ preferred to reduce writing fatigue</td>
+        <td>Minimalist UI, no distractions. Optional background noise filter. Time reminders optional (not forced).</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Dyslexia</span></td>
+        <td>Questions in OpenDyslexic font, extra line spacing, no dense paragraphs. Questions also read aloud.</td>
+        <td>Typed or voice. Spell-check never penalised in scoring.</td>
+        <td>Dyslexia font, bionic reading, read-aloud of each question with highlighting</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Physical / Motor Disability</span></td>
+        <td>Standard question content</td>
+        <td>Voice dictation preferred. Switch access supported. No time penalties.</td>
+        <td>Large touch targets, voice navigation, no drag-and-drop interactions</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Intellectual Disability</span></td>
+        <td>Questions simplified to core concept. Simple vocabulary. Illustrated with supporting icons.</td>
+        <td>MCQ with pictures/icons as options, not just text</td>
+        <td>Large text, simple interface, guided one-step-at-a-time flow</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Speech Impairment (Stammering)</span></td>
+        <td>Standard question content</td>
+        <td>For oral tests: voice with stammer-friendly Gemini processing. Written option always available.</td>
+        <td>Extended time limits. Stammer-friendly mode active — pauses not counted against the student.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Assignments — Same Adaptive Logic</h3>
+  <p>Assignments follow the identical adaptive system as tests. A written assignment for a blind student becomes a voice-submitted assignment. A group assignment for an autistic student has clearly structured individual tasks with no ambiguous social components. The teacher reviews all submissions in a unified, normalised format.</p>
+
+  <div class="callout warn">
+    <span class="callout-icon">⚠️</span>
+    <div><strong>Important for Scoring:</strong> When a blind student submits by voice or an autistic student submits shorter answers, Gemini's evaluation prompt is explicitly told about the student's profile so that scoring is fair and equitable — not penalising for format but rewarding for knowledge demonstrated.</div>
+  </div>
+</div>
+</section>
+
+<!-- S9: LIVE CLASS -->
+<section id="s9">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">09</span><span class="sec-tag">Live Sessions</span></div>
+  <h2>Live Class <span class="accent">Feature</span></h2>
+
+  <p>The live class is where EduVoice's real-time accessibility capabilities shine. Every student joins the same session URL, but their interface is personalised to their profile.</p>
+
+  <h3>Teacher — Conducting a Live Class</h3>
+  <ul>
+    <li>Teacher starts a live session from their dashboard. A unique session link is generated and shared with the class.</li>
+    <li>Teacher can share their screen, use a virtual whiteboard, or speak directly.</li>
+    <li>All speech is transcribed in real-time by Gemini and displayed as live captions for deaf/hard-of-hearing students.</li>
+    <li>A live audio description stream is available for blind students — describing any visual elements the teacher is drawing or showing.</li>
+    <li>Teacher can see a live "Needs Attention" sidebar showing which students are using AAC, which are struggling, and which requested repetition.</li>
+  </ul>
+
+  <h3>Student — Attending a Live Class</h3>
+  <div class="flow-wrap">
+    <div class="flow-title">What Each Student Type Experiences During Live Class</div>
+    <table class="dis-table" style="margin:0;">
+      <thead>
+        <tr><th>Student Profile</th><th>Live Class Experience</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="dis-name">Blind Student</span></td>
+          <td>Joins via audio only. Screen reader reads captions. ElevenLabs narrates any visual elements when the teacher describes them or when Gemini auto-generates descriptions. Can ask questions via voice.</td>
+        </tr>
+        <tr>
+          <td><span class="dis-name">Deaf Student</span></td>
+          <td>Sees live captions at the bottom of the screen, synced to teacher's speech. ISL keyword panel visible on the side. Can type questions which appear on the teacher's screen. No audio required.</td>
+        </tr>
+        <tr>
+          <td><span class="dis-name">ADHD Student</span></td>
+          <td>Focus mode available — dims everything except the teacher's video/whiteboard. Periodic micro-summaries of the last 2 minutes generated by Gemini and shown as a small pop-up to help them re-orient if distracted.</td>
+        </tr>
+        <tr>
+          <td><span class="dis-name">Autistic Student</span></td>
+          <td>Sensory mode active — no unexpected popups, no sudden visual changes. Chat-based Q&A preferred over speaking aloud. Structured class outline shown on the side so the student always knows what's coming next.</td>
+        </tr>
+        <tr>
+          <td><span class="dis-name">Non-Verbal Student</span></td>
+          <td>AAC grid always visible during class. Clicking any phrase speaks it aloud in the class session. Teacher hears the student's AAC voice as a participant voice.</td>
+        </tr>
+        <tr>
+          <td><span class="dis-name">Dyslexia Student</span></td>
+          <td>Captions displayed in OpenDyslexic font with extra spacing. Can tap any captioned word to hear it repeated. Post-class transcript automatically generated in dyslexia-friendly format.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Post-Class Automatic Actions</h3>
+  <ul>
+    <li>Full transcript saved to Snowflake and accessible to all students in their profile-specific format</li>
+    <li>Key concepts extracted by Gemini and turned into a summary card for each student</li>
+    <li>For blind students: audio replay of the full session available immediately</li>
+    <li>For deaf students: captioned video replay with ISL keyword overlays added</li>
+    <li>Teacher sees attendance + engagement summary</li>
+  </ul>
+</div>
+</section>
+
+<!-- S10: DISABILITY TABLE -->
+<section id="s10">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">10</span><span class="sec-tag">Disability Reference</span></div>
+  <h2>Disability-Specific <span class="accent">Adaptations — Master Table</span></h2>
+
+  <p>This is the complete reference of every major disability type supported by EduVoice and the specific technical adaptations made across the platform for each.</p>
+
+  <table class="dis-table">
+    <thead>
+      <tr><th>Disability</th><th>Content Delivery</th><th>Test / Assignment</th><th>Live Class</th><th>UI</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="dis-name">Blindness / Severe Visual Impairment</span></td>
+        <td>Full audio narration. Audio descriptions of all images and diagrams. Screen-reader-optimised HTML output.</td>
+        <td>Voice submission. All visual questions replaced with text descriptions.</td>
+        <td>Audio-only mode. Auto audio description of visual elements.</td>
+        <td>ARIA labels everywhere, keyboard-only navigation, voice commands.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Low Vision</span></td>
+        <td>Large print, high contrast, optional audio.</td>
+        <td>Large print, extended time.</td>
+        <td>Zoomed captions, large controls.</td>
+        <td>Font scale up to 3×, high contrast toggle, no small text anywhere.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Deafness / Severe Hearing Impairment</span></td>
+        <td>Full text transcript, captions, ISL keyword overlays, visual alerts.</td>
+        <td>Text submission. Video/ISL submission option. Audio questions replaced with text.</td>
+        <td>Real-time captions, ISL panel, text-based Q&amp;A.</td>
+        <td>No audio-only feedback. Visual-only notifications.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Hard of Hearing</span></td>
+        <td>Captions always on, audio available at higher volume setting.</td>
+        <td>Captions on. Extended time.</td>
+        <td>Captions on, visual alerts.</td>
+        <td>Volume boost option, visual-first notifications.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Autism Spectrum Disorder</span></td>
+        <td>Literal, structured language. No idioms. Short paragraphs. Predictable layout.</td>
+        <td>MCQ preferred. Literal questions. No ambiguity. No time display to reduce anxiety.</td>
+        <td>Structured class outline shown. No sudden changes. Chat-based participation.</td>
+        <td>Sensory mode — no animations, no popups, calm colour palette.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">ADHD</span></td>
+        <td>Chunked content — one small section at a time. No scrolling. Micro-summaries.</td>
+        <td>One question at a time. MCQ preferred. Flexible time, gentle reminders only.</td>
+        <td>Focus mode. Periodic 2-minute summaries. No full-screen distractions.</td>
+        <td>Minimal UI. No unnecessary elements. Optional calming background.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Dyslexia</span></td>
+        <td>OpenDyslexic font, bionic reading, extra line spacing, synchronised word-highlight read-aloud.</td>
+        <td>Dyslexia font. Read-aloud of questions. Spelling not penalised.</td>
+        <td>Captions in dyslexia font. Post-class transcript in dyslexia format.</td>
+        <td>Font toggle, spacing slider, focus line reader.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Dyscalculia</span></td>
+        <td>Mathematical content presented with extra visual aids, step-by-step breakdowns, colour-coded numbers.</td>
+        <td>Calculator always allowed. Step-by-step marks awarded, not just final answer.</td>
+        <td>Visual number line and calculator widget visible during maths segments.</td>
+        <td>Number display aids available.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Stammering / Stuttering</span></td>
+        <td>Standard content delivery.</td>
+        <td>Stammer-friendly voice submission — Gemini ignores pauses and repetitions. Extended oral test time.</td>
+        <td>Not required to speak aloud. Can type participation. AAC available.</td>
+        <td>No voice-pressure UI. Submission timers hidden.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Dysarthria (Motor Speech)</span></td>
+        <td>Standard content.</td>
+        <td>Voice submission with Gemini configured for atypical speech patterns. Written option always available.</td>
+        <td>AAC grid available. Text participation option.</td>
+        <td>Extended timeout on all voice inputs.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Physical / Motor Disability</span></td>
+        <td>Standard content, all accessible by voice and keyboard.</td>
+        <td>Voice submission. No drag-and-drop question types. No time pressure.</td>
+        <td>All controls operable by voice and keyboard. No hand gesture requirements.</td>
+        <td>Large targets, switch access, voice navigation, no fine motor required.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Intellectual Disability</span></td>
+        <td>Simple vocabulary, very short sentences, icon-supported text, step-by-step guided reading.</td>
+        <td>MCQ with picture options. Simple language. Guided submission flow.</td>
+        <td>Simplified class view. Direct, clear instructions. Repeat option always visible.</td>
+        <td>Simplified UI mode — fewer options visible at once.</td>
+      </tr>
+      <tr>
+        <td><span class="dis-name">Non-Verbal (AAC User)</span></td>
+        <td>Standard content.</td>
+        <td>AAC phrase selection or typed answers. No oral requirement.</td>
+        <td>AAC grid active and prominent. Phrases spoken aloud in class.</td>
+        <td>AAC grid permanently accessible, large, easy to tap.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</section>
+
+<!-- S11: API CONTRACTS -->
+<section id="s11">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">11</span><span class="sec-tag">Backend</span></div>
+  <h2>API <span class="accent">Contracts</span></h2>
+
+  <p>High-level API design for the FastAPI backend. These are the endpoints you need to build. No code — just the contract each endpoint must honour.</p>
+
+  <h3>Teacher Endpoints</h3>
+  <table class="api-table">
+    <thead><tr><th>Method</th><th>Endpoint</th><th>What It Does</th><th>Key Request Fields</th><th>Key Response Fields</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="method-post">POST</span></td>
+        <td class="mono">/lesson/generate</td>
+        <td>Teacher submits content (text/audio/video). Triggers conversion engine for all student profiles in the class.</td>
+        <td class="mono">topic, content_text, audio_url, video_url, grade, class_id, teacher_id</td>
+        <td class="mono">lesson_id, tiers[], audio_urls{}, conversion_status</td>
+      </tr>
+      <tr>
+        <td><span class="method-post">POST</span></td>
+        <td class="mono">/lesson/publish</td>
+        <td>Publishes a generated lesson to the assigned class. Students can now access it.</td>
+        <td class="mono">lesson_id, class_id, publish_at (optional scheduled)</td>
+        <td class="mono">published: true, notified_students: []</td>
+      </tr>
+      <tr>
+        <td><span class="method-post">POST</span></td>
+        <td class="mono">/test/create</td>
+        <td>Teacher creates a master test. Triggers generation of adaptive variants for each student profile.</td>
+        <td class="mono">questions[], class_id, due_date, time_limit_minutes</td>
+        <td class="mono">test_id, variants_generated: {profile_type: variant_id}</td>
+      </tr>
+      <tr>
+        <td><span class="method-post">POST</span></td>
+        <td class="mono">/assignment/create</td>
+        <td>Same as test creation but for assignments with flexible submission formats.</td>
+        <td class="mono">instructions, rubric, class_id, due_date, submission_formats[]</td>
+        <td class="mono">assignment_id, variants_generated</td>
+      </tr>
+      <tr>
+        <td><span class="method-post">POST</span></td>
+        <td class="mono">/live/start</td>
+        <td>Starts a live class session. Returns session link for students.</td>
+        <td class="mono">class_id, teacher_id, title</td>
+        <td class="mono">session_id, join_url, real_time_caption_stream_url</td>
+      </tr>
+      <tr>
+        <td><span class="method-get">GET</span></td>
+        <td class="mono">/analytics/class/{class_id}</td>
+        <td>Returns class-wide analytics including accessibility usage and impact.</td>
+        <td class="mono">—</td>
+        <td class="mono">avg_scores, accessibility_impact[], student_trends[], common_errors[]</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Student Endpoints</h3>
+  <table class="api-table">
+    <thead><tr><th>Method</th><th>Endpoint</th><th>What It Does</th><th>Key Request Fields</th><th>Key Response Fields</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="method-get">GET</span></td>
+        <td class="mono">/lesson/{lesson_id}/student</td>
+        <td>Returns the personalised lesson variant for the requesting student. Profile detected from JWT.</td>
+        <td class="mono">student_id (from JWT)</td>
+        <td class="mono">content_text, audio_url, captions, sign_keywords{}, format_type</td>
+      </tr>
+      <tr>
+        <td><span class="method-post">POST</span></td>
+        <td class="mono">/practice/speech-analyze</td>
+        <td>Analyses a student's recorded speech. Returns word-level feedback heatmap.</td>
+        <td class="mono">audio (file), reference_text, mode, stammer_friendly, student_id</td>
+        <td class="mono">transcript, scores{}, word_feedback[], feedback_text, feedback_audio_url</td>
+      </tr>
+      <tr>
+        <td><span class="method-post">POST</span></td>
+        <td class="mono">/test/{test_id}/submit</td>
+        <td>Student submits test answers in any format (text, voice, MCQ). Gemini evaluates fairly per student profile.</td>
+        <td class="mono">answers[], input_types[], student_id, accessibility_mode</td>
+        <td class="mono">score, question_feedback[], encouragement_audio_url</td>
+      </tr>
+      <tr>
+        <td><span class="method-post">POST</span></td>
+        <td class="mono">/aac/speak</td>
+        <td>Converts text to speech immediately for AAC non-verbal students. Streams audio back.</td>
+        <td class="mono">text, student_id</td>
+        <td class="mono">Streaming audio/mpeg</td>
+      </tr>
+      <tr>
+        <td><span class="method-post">POST</span></td>
+        <td class="mono">/interview/turn</td>
+        <td>Drives one turn of the mock interview. Returns next question and feedback on current answer.</td>
+        <td class="mono">session_id, student_answer, turn_number, history[], accessibility{pacing, stammer_friendly}</td>
+        <td class="mono">next_question, question_audio_url, turn_feedback{}, interview_complete</td>
+      </tr>
+      <tr>
+        <td><span class="method-get">GET</span></td>
+        <td class="mono">/student/progress</td>
+        <td>Returns the student's own learning progress and accessibility usage data.</td>
+        <td class="mono">student_id (JWT)</td>
+        <td class="mono">session_history[], score_trends[], accessibility_usage{}, improvement_areas[]</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Voice / Teacher Specially Abled Endpoints</h3>
+  <table class="api-table">
+    <thead><tr><th>Method</th><th>Endpoint</th><th>What It Does</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="method-post">POST</span></td>
+        <td class="mono">/voice/command</td>
+        <td>Receives a voice command from a specially abled teacher. Gemini interprets intent and returns action + confirmation text for ElevenLabs to read back.</td>
+      </tr>
+      <tr>
+        <td><span class="method-post">POST</span></td>
+        <td class="mono">/voice/dictate-lesson</td>
+        <td>Teacher dictates a full lesson by voice. Gemini structures it into the lesson format and returns it for confirmation before saving.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</section>
+
+<!-- S12: PROMPTS -->
+<section id="s12">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">12</span><span class="sec-tag">AI Engineering</span></div>
+  <h2>Gemini <span class="accent">Prompt Templates</span></h2>
+
+  <p>These are the exact prompts to use. Store them as constants in <span class="mono">utils/prompts.py</span>. Use Python f-strings or <span class="mono">.format()</span> to inject variables.</p>
+
+  <h3>1. Differentiated Lesson Generation</h3>
+  <div class="prompt-box">
+    <span class="prompt-label">Gemini Prompt</span>
+<span class="p-cm">"""
+You are an expert Indian school curriculum writer aligned with NEP 2020.
+Create a differentiated reading lesson on: <span class="p-var">{topic}</span> for Grade <span class="p-var">{grade}</span>.
+
+Generate exactly <span class="p-var">{tiers}</span> versions labelled: Foundation, Grade-Level, Advanced.
+
+For EACH version provide:
+1. A <span class="p-var">{word_count}</span>-word passage (appropriate vocabulary for that level)
+2. 3 comprehension questions with model answers
+3. 3 key vocabulary words with simple, one-sentence definitions
+
+Additional rules:
+- Language: <span class="p-var">{language}</span> (default: English)
+- No idioms or culturally ambiguous phrases
+- Use Indian examples, names, and contexts where relevant
+- Keep sentences short at Foundation level (max 12 words per sentence)
+
+Return ONLY a valid JSON object. No preamble, no explanation.
+Schema: { "tiers": [ { "level": 1, "label": "...", "text": "...",
+"questions": [{"q": "...", "a": "..."}], "vocabulary": [{"word": "...", "definition": "..."}] } ] }
+"""</span>
+  </div>
+
+  <h3>2. Autism-Friendly Content Reformatter</h3>
+  <div class="prompt-box">
+    <span class="prompt-label">Gemini Prompt</span>
+<span class="p-cm">"""
+You are rewriting educational content for a student with Autism Spectrum Disorder.
+
+Original content: <span class="p-var">{content}</span>
+
+Rewrite rules (follow ALL of them):
+- Use only literal, direct language. Remove ALL idioms, metaphors, and figurative language.
+- Replace every idiom with its literal meaning. (e.g., "It's raining cats and dogs" → "It is raining very heavily.")
+- Use short sentences (max 10 words each).
+- Use bullet points for lists. Never use flowing prose for listing things.
+- Add a "What this means" sentence in plain language after any complex concept.
+- Do NOT use: rhetorical questions, sarcasm, humour, or ambiguous phrasing.
+- Structure: Title → Objective (one sentence: "By the end of this, you will know...") → Content → Summary bullet points.
+- Tone: calm, neutral, matter-of-fact.
+
+Return ONLY the reformatted text. No explanation or commentary.
+"""</span>
+  </div>
+
+  <h3>3. Stammer-Friendly Speech Analysis</h3>
+  <div class="prompt-box">
+    <span class="prompt-label">Gemini Prompt</span>
+<span class="p-cm">"""
+You are a compassionate English speech coach working with Indian students.
+
+Student transcript: "<span class="p-var">{transcript}</span>"
+Reference text: "<span class="p-var">{reference_text}</span>"
+Stammer-friendly mode: <span class="p-var">{stammer_friendly}</span>
+
+Analysis rules:
+- If stammer_friendly is true: IGNORE all word repetitions (e.g. "I I I want"),
+  long pauses (marked as "..."), and partial words (e.g. "I wa- want").
+  Reconstruct the intended sentence from completed words only. Score ONLY the reconstructed version.
+- Score grammar: 0-100 (sentence structure, tense, agreement)
+- Score pronunciation: 0-100 (based on word completion and phoneme accuracy relative to reference)
+- Score fluency: 0-100 (skip entirely if stammer_friendly is true, set to null)
+- For each word in the reference, mark: "good" (score >80), "review" (50-80), "poor" (<50)
+- Feedback tone: warm, encouraging, never negative. Never mention the stammer.
+- End with exactly ONE specific, actionable improvement tip.
+
+Return ONLY valid JSON:
+{ "scores": {"grammar": 0, "pronunciation": 0, "fluency": null},
+  "word_feedback": [{"word": "...", "score": 0, "status": "good|review|poor"}],
+  "feedback_text": "...", "tip": "..." }
+"""</span>
+  </div>
+
+  <h3>4. Adaptive Test Question Generator</h3>
+  <div class="prompt-box">
+    <span class="prompt-label">Gemini Prompt</span>
+<span class="p-cm">"""
+You are adapting exam questions for a student with the following profile:
+Disability type: <span class="p-var">{disability_type}</span>
+Learning level: <span class="p-var">{learning_level}</span>
+
+Original question: "<span class="p-var">{original_question}</span>"
+Original answer options (if MCQ): <span class="p-var">{options}</span>
+
+Adaptation rules for <span class="p-var">{disability_type}</span>:
+  IF blindness: Replace any visual references with full text descriptions. Remove image dependencies.
+  IF autism: Rewrite in literal, unambiguous language. Remove idioms. Make question structure completely explicit.
+  IF dyslexia: Simplify sentence structure. Keep question under 20 words if possible. Provide read-aloud flag.
+  IF intellectual_disability: Simplify vocabulary. Add a visual description for each option if MCQ. Max 1 concept per question.
+  IF adhd: Make question extremely concise. One clause only. No compound questions.
+  IF hearing_impairment: Ensure question is fully self-contained in text. No audio references.
+  IF motor_disability: Ensure answer input requires no fine motor skill (voice or MCQ only, no drag-and-drop).
+
+The KNOWLEDGE being tested must remain identical. Only the FORMAT and LANGUAGE changes.
+
+Return ONLY valid JSON:
+{ "adapted_question": "...", "adapted_options": ["..."],
+  "input_mode_recommendation": "mcq|voice|typed|picture_mcq",
+  "accommodations": ["extended_time", "no_spelling_penalty"] }
+"""</span>
+  </div>
+
+  <h3>5. Equitable Answer Evaluator</h3>
+  <div class="prompt-box">
+    <span class="prompt-label">Gemini Prompt</span>
+<span class="p-cm">"""
+You are evaluating a student's answer with equitable, disability-aware assessment.
+
+Question: "<span class="p-var">{question}</span>"
+Model answer: "<span class="p-var">{model_answer}</span>"
+Student's answer: "<span class="p-var">{student_answer}</span>"
+Student disability profile: <span class="p-var">{disability_type}</span>
+Submission format: <span class="p-var">{submission_format}</span>  (voice_transcribed | typed | mcq)
+
+Evaluation rules:
+- Assess KNOWLEDGE demonstrated, not writing quality or spelling (unless language assessment).
+- If submission_format is voice_transcribed: the student spoke this answer. Do NOT penalise for
+  informal spoken grammar. Accept spoken equivalents ("yeah" = "yes", "cos" = "because").
+- If disability is dyslexia: do NOT deduct marks for spelling errors. Assess meaning conveyed.
+- If disability is autism: accept factually correct but socially unconventional phrasing.
+- If disability is intellectual_disability: award partial credit for any correct concept mentioned.
+- If disability is stammering: the transcript may be fragmented — reconstruct intended meaning
+  and assess the intended answer, not the transcript literally.
+- Be generous in identifying partially correct answers. Award marks for each correct concept.
+- Provide brief, encouraging feedback (2 sentences max).
+
+Return ONLY valid JSON:
+{ "score": 0, "max_score": <span class="p-var">{max_score}</span>, "correct_concepts": ["..."],
+  "missed_concepts": ["..."], "feedback": "...", "encouragement": "..." }
+"""</span>
+  </div>
+
+  <h3>6. Voice Command Interpreter (Specially Abled Teacher)</h3>
+  <div class="prompt-box">
+    <span class="prompt-label">Gemini Prompt</span>
+<span class="p-cm">"""
+You are the voice assistant for a specially abled teacher using EduVoice.
+The teacher cannot use a keyboard or screen easily. They control the app entirely by voice.
+
+Teacher's voice input: "<span class="p-var">{voice_input}</span>"
+Current app context: <span class="p-var">{app_context}</span>  (e.g., "teacher_dashboard", "lesson_editor")
+Teacher disability: <span class="p-var">{teacher_disability}</span>
+
+Interpret the teacher's intent and map it to one of these app actions:
+  CREATE_LESSON, PUBLISH_LESSON, CREATE_TEST, START_LIVE_CLASS,
+  VIEW_ANALYTICS, EDIT_CONTENT, DELETE_CONTENT, NAVIGATE_HOME,
+  READ_BACK_CONTENT, ASSIGN_TO_CLASS, UNKNOWN
+
+Rules:
+- Be tolerant of speech imperfections, partial sentences, and fragmented commands.
+- Infer intent from context if the command is ambiguous.
+- If UNKNOWN, generate a clarifying question in simple language.
+- Provide a confirmation message the app should READ BACK to the teacher using TTS.
+
+Return ONLY valid JSON:
+{ "action": "CREATE_LESSON", "parameters": {"topic": "...", "grade": "..."},
+  "confirmation_message": "I will now create a new lesson on... for grade... Is that correct?",
+  "needs_clarification": false, "clarification_question": null }
+"""</span>
+  </div>
+
+  <h3>7. Live Class Real-Time Summary (ADHD Support)</h3>
+  <div class="prompt-box">
+    <span class="prompt-label">Gemini Prompt</span>
+<span class="p-cm">"""
+You are helping a student with ADHD stay focused during a live class.
+The following is the last 2 minutes of the teacher's speech transcript:
+
+"<span class="p-var">{last_2_min_transcript}</span>"
+
+Generate a micro-summary: exactly 2-3 bullet points of the KEY things just discussed.
+Rules:
+- Maximum 8 words per bullet point.
+- Start each bullet with a strong verb or key noun.
+- Do NOT include examples, just the core idea.
+- Tone: clear, direct, not condescending.
+- End with: "Still to come: <span class="p-var">{next_topic_hint}</span>"
+
+Return ONLY plain text. No JSON. No headers. Just the bullet points and the "Still to come" line.
+"""</span>
+  </div>
+</div>
+</section>
+
+<!-- S13: SNOWFLAKE -->
+<section id="s13">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">13</span><span class="sec-tag">Data</span></div>
+  <h2>Snowflake <span class="accent">Data Model</span></h2>
+
+  <p>Snowflake stores both structured data (scores, profiles, metadata) and unstructured data (transcripts, feedback JSON, accessibility settings) using its VARIANT column type — a key differentiator to highlight to judges.</p>
+
+  <h3>Core Tables</h3>
+
+  <h4>USERS</h4>
+  <table class="dis-table">
+    <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="dis-name">user_id</td><td>VARCHAR(64)</td><td>Primary key — Auth0 sub claim</td></tr>
+      <tr><td class="dis-name">role</td><td>VARCHAR(16)</td><td>'teacher' | 'student' | 'admin'</td></tr>
+      <tr><td class="dis-name">email</td><td>VARCHAR(256)</td><td></td></tr>
+      <tr><td class="dis-name">institution_id</td><td>VARCHAR(64)</td><td>School or college</td></tr>
+      <tr><td class="dis-name">disability_profile</td><td>VARIANT</td><td>JSON: {"type": "dyslexia", "severity": "moderate"}</td></tr>
+      <tr><td class="dis-name">learning_style</td><td>VARCHAR(32)</td><td>'visual' | 'auditory' | 'reading' | 'kinesthetic'</td></tr>
+      <tr><td class="dis-name">accessibility_prefs</td><td>VARIANT</td><td>JSON: {"dyslexia_font": true, "speech_pace": 0.8, "captions": true}</td></tr>
+      <tr><td class="dis-name">created_at</td><td>TIMESTAMP_NTZ</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <h4>LESSONS</h4>
+  <table class="dis-table">
+    <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="dis-name">lesson_id</td><td>VARCHAR(64)</td><td>Primary key</td></tr>
+      <tr><td class="dis-name">teacher_id</td><td>VARCHAR(64)</td><td>FK → users</td></tr>
+      <tr><td class="dis-name">class_id</td><td>VARCHAR(64)</td><td>FK → classes</td></tr>
+      <tr><td class="dis-name">topic</td><td>VARCHAR(512)</td><td></td></tr>
+      <tr><td class="dis-name">grade</td><td>VARCHAR(16)</td><td></td></tr>
+      <tr><td class="dis-name">master_content</td><td>TEXT</td><td>Original teacher input</td></tr>
+      <tr><td class="dis-name">generated_variants</td><td>VARIANT</td><td>JSON map: {"dyslexia": {...}, "autism": {...}, "blind": {...}}</td></tr>
+      <tr><td class="dis-name">audio_urls</td><td>VARIANT</td><td>JSON map: {"standard": "url", "slow": "url", "audio_description": "url"}</td></tr>
+      <tr><td class="dis-name">sign_keywords</td><td>VARIANT</td><td>JSON: {"photosynthesis": "isl_gif_url"}</td></tr>
+      <tr><td class="dis-name">published_at</td><td>TIMESTAMP_NTZ</td><td>Null if draft</td></tr>
+    </tbody>
+  </table>
+
+  <h4>PRACTICE_SESSIONS</h4>
+  <table class="dis-table">
+    <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="dis-name">session_id</td><td>VARCHAR(64)</td><td>Primary key</td></tr>
+      <tr><td class="dis-name">student_id</td><td>VARCHAR(64)</td><td>FK → users</td></tr>
+      <tr><td class="dis-name">lesson_id</td><td>VARCHAR(64)</td><td>Optional FK → lessons</td></tr>
+      <tr><td class="dis-name">mode</td><td>VARCHAR(32)</td><td>'read_aloud' | 'interview' | 'free_speech'</td></tr>
+      <tr><td class="dis-name">accessibility_mode_used</td><td>VARIANT</td><td>Snapshot of settings active during session</td></tr>
+      <tr><td class="dis-name">fluency_score</td><td>FLOAT</td><td>Null if stammer_friendly=true</td></tr>
+      <tr><td class="dis-name">grammar_score</td><td>FLOAT</td><td></td></tr>
+      <tr><td class="dis-name">pronunciation_score</td><td>FLOAT</td><td></td></tr>
+      <tr><td class="dis-name">transcript</td><td>TEXT</td><td>Unstructured — full speech transcript</td></tr>
+      <tr><td class="dis-name">audio_url</td><td>VARCHAR(1024)</td><td>In DigitalOcean Spaces</td></tr>
+      <tr><td class="dis-name">feedback_json</td><td>VARIANT</td><td>Full Gemini feedback object</td></tr>
+      <tr><td class="dis-name">started_at</td><td>TIMESTAMP_NTZ</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <h4>TEST_SUBMISSIONS</h4>
+  <table class="dis-table">
+    <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="dis-name">submission_id</td><td>VARCHAR(64)</td><td>Primary key</td></tr>
+      <tr><td class="dis-name">test_id</td><td>VARCHAR(64)</td><td>FK → tests</td></tr>
+      <tr><td class="dis-name">student_id</td><td>VARCHAR(64)</td><td>FK → users</td></tr>
+      <tr><td class="dis-name">answers_json</td><td>VARIANT</td><td>Student answers with input_type per question</td></tr>
+      <tr><td class="dis-name">evaluated_scores</td><td>VARIANT</td><td>Per-question score + feedback from Gemini</td></tr>
+      <tr><td class="dis-name">total_score</td><td>FLOAT</td><td></td></tr>
+      <tr><td class="dis-name">accessibility_mode_used</td><td>VARIANT</td><td>Profile at time of submission</td></tr>
+      <tr><td class="dis-name">submitted_at</td><td>TIMESTAMP_NTZ</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <h4>EVENTS (Accessibility Impact Tracking)</h4>
+  <table class="dis-table">
+    <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="dis-name">event_id</td><td>VARCHAR(64)</td><td>Primary key</td></tr>
+      <tr><td class="dis-name">user_id</td><td>VARCHAR(64)</td><td></td></tr>
+      <tr><td class="dis-name">event_type</td><td>VARCHAR(64)</td><td>'dyslexia_font_on', 'aac_used', 'captions_toggled', 'stammer_mode_on'</td></tr>
+      <tr><td class="dis-name">payload</td><td>VARIANT</td><td>Context data for the event</td></tr>
+      <tr><td class="dis-name">ts</td><td>TIMESTAMP_NTZ</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Key Analytics Query (for Demo)</h3>
+  <p>This single query demonstrates why Snowflake's VARIANT type matters — it joins structured scores with unstructured JSON accessibility settings to prove impact:</p>
+  <div class="prompt-box">
+    <span class="prompt-label">Snowflake SQL</span>
+<span class="p-str">SELECT
+  ps.accessibility_mode_used:dyslexia_font::BOOLEAN  AS dyslexia_font_active,
+  ps.accessibility_mode_used:stammer_friendly::BOOLEAN AS stammer_mode_active,
+  COUNT(*)                                            AS sessions,
+  ROUND(AVG(ps.grammar_score), 1)                    AS avg_grammar_score,
+  ROUND(AVG(ps.pronunciation_score), 1)              AS avg_pronunciation_score
+FROM practice_sessions ps
+JOIN users u ON ps.student_id = u.user_id
+WHERE u.institution_id = '<span class="p-var">SCHOOL_ID</span>'
+GROUP BY 1, 2
+ORDER BY dyslexia_font_active DESC;</span>
+
+<span class="p-cm">-- Result example:
+-- dyslexia_font_active | stammer_mode_active | sessions | avg_grammar | avg_pronunciation
+-- TRUE                 | FALSE               | 47       | 78.3        | 74.1
+-- FALSE                | FALSE               | 203      | 66.9        | 68.5
+-- This proves dyslexia font is associated with a 12-point grammar improvement.</span>
+  </div>
+</div>
+</section>
+
+<!-- S14: TIMELINE -->
+<section id="s14">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">14</span><span class="sec-tag">Execution</span></div>
+  <h2>48-Hour <span class="accent">Build Timeline</span></h2>
+
+  <p>For a 2-person all-rounder team. The golden rule: <strong>at Hour 10, you need a working end-to-end demo</strong>. Everything after is depth.</p>
+
+  <div class="role-split">
+    <div class="role-col">
+      <div class="role-col-title"><span class="role-dot dot-t"></span>Person A — Backend + AI</div>
+      <p style="font-size:13px; color:var(--ink2);">FastAPI · Gemini/OpenRouter · ElevenLabs · Snowflake · DigitalOcean deploy</p>
+    </div>
+    <div class="role-col">
+      <div class="role-col-title"><span class="role-dot dot-s"></span>Person B — Frontend + UX</div>
+      <p style="font-size:13px; color:var(--ink2);">Next.js · Auth0 · v0 by Vercel · All accessibility UI · API wiring</p>
+    </div>
+  </div>
+
+  <div class="timeline" style="margin-top:24px;">
+    <div class="tl-item">
+      <div class="tl-time">Hour 0–2 · Both</div>
+      <div class="tl-title">Project Scaffold</div>
+      <div class="tl-body">Create GitHub repo. Set up .env files with all 5 sponsor API keys. A: FastAPI skeleton running with health check. B: Next.js running with Auth0 installed. Both verify they can reach each other on localhost.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Hour 2–10 · Parallel</div>
+      <div class="tl-title">Core Engine (Most Critical)</div>
+      <div class="tl-body"><strong>A:</strong> Build <span class="mono">/lesson/generate</span> — Gemini call → 3 tiers → ElevenLabs audio for each → upload to DO Spaces → save to Snowflake. Test in Postman until it works perfectly.<br/><strong>B:</strong> Auth0 login + role routing (teacher/student). Teacher "Create Lesson" form (use v0). Wire to Person A's API. Student can view lesson in standard format.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Hour 10 · Checkpoint</div>
+      <div class="tl-title">Minimum Viable Demo ✅</div>
+      <div class="tl-body">Teacher logs in → creates lesson → student logs in → reads lesson → audio plays. If you have this, you have a submission. Commit this state to git and tag it "MVP".</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Hour 10–18 · Parallel</div>
+      <div class="tl-title">Accessibility + Student Practice</div>
+      <div class="tl-body"><strong>A:</strong> Build <span class="mono">/practice/speech-analyze</span> with stammer-friendly Gemini prompt. Build <span class="mono">/aac/speak</span> streaming endpoint. Write Snowflake practice_sessions write logic.<br/><strong>B:</strong> Add Accessibility Panel (dyslexia font, sensory mode, contrast, captions, font scale). Build Read-Aloud page with MediaRecorder. Display word heatmap after analysis. AAC Grid component.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Hour 18–28 · Parallel</div>
+      <div class="tl-title">Tests, Assignments, Analytics</div>
+      <div class="tl-body"><strong>A:</strong> Build <span class="mono">/test/create</span> and <span class="mono">/test/submit</span> with adaptive question generation and equitable evaluation prompts. Build <span class="mono">/analytics/class</span> with Snowflake VARIANT query.<br/><strong>B:</strong> Build test-taking UI that adapts layout based on accessibility mode (one question at a time for ADHD, MCQ with pictures for intellectual disability). Teacher analytics dashboard with Snowflake impact chart.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Hour 28–36 · Parallel</div>
+      <div class="tl-title">Specially Abled Teacher + Live Class</div>
+      <div class="tl-body"><strong>A:</strong> Build <span class="mono">/voice/command</span> endpoint with intent interpreter prompt. Build live class caption streaming (WebSocket or polling).<br/><strong>B:</strong> Build specially abled teacher onboarding and voice-command UI. Implement live class student views with real-time captions and ISL panel. ADHD micro-summary widget.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Hour 36–44 · Both</div>
+      <div class="tl-title">Deploy + Sign Language + Polish</div>
+      <div class="tl-body"><strong>A:</strong> Docker build → push to DigitalOcean App Platform. Verify all Snowflake writes from production. Check DO Spaces audio delivery.<br/><strong>B:</strong> Vercel deploy. Add ISL keyword GIF hover overlay on lesson viewer. Fix mobile layout. Record backup demo video in case live demo fails.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Hour 44–48 · Both</div>
+      <div class="tl-title">Pitch Prep + Submission</div>
+      <div class="tl-body">Write README with all 5 sponsor logos and exact usage description. Rehearse the demo script 3 times. Prepare fallback screenshots. Submit on time.</div>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <span class="callout-icon">⚠️</span>
+    <div><strong>Hackathon Survival Rule:</strong> If any feature is taking longer than 2 hours to build, mock it. A hardcoded AAC grid that calls ElevenLabs proves the concept just as well as a dynamic one. Judges care about the idea and the demo — not whether the data is live or mocked.</div>
+  </div>
+</div>
+</section>
+
+<!-- S15: DEMO SCRIPT -->
+<section id="s15">
+<div class="wrap">
+  <div class="sec-eyebrow"><span class="sec-num">15</span><span class="sec-tag">Pitch</span></div>
+  <h2>Demo <span class="accent">Script</span></h2>
+
+  <p>This 5-minute script covers every sponsor, every major feature, and the full inclusion story. Practise it until it's smooth.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time">0:00 – 0:30 · Hook</div>
+      <div class="tl-title">Open with the Problem</div>
+      <div class="tl-body">"In India today, over 80 lakh students have a recognised disability. They sit in the same classrooms as everyone else. But the content, the tests, the assignments — they're all made for one kind of student. Teachers who want to change this spend 8 to 10 extra hours every week creating accessible content. We built EduVoice to give those hours back."</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">0:30 – 1:30 · Teacher Demo</div>
+      <div class="tl-title">Teacher Logs In and Creates a Lesson</div>
+      <div class="tl-body">Log in as teacher "Ms. Sharma." Show class roster: "32 students. 2 blind, 1 deaf, 3 dyslexic, 2 autistic." Type topic "Water Cycle" → click Generate. Show all 3 tiers appear. Play Foundation audio (ElevenLabs). Show autism-reformatted version with bullet points and literal language. Show dyslexia version with OpenDyslexic font. Say: "One lesson. Five minutes. Every student covered. What used to take 8 hours."</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">1:30 – 2:15 · Specially Abled Teacher</div>
+      <div class="tl-title">Blind Teacher Creates by Voice</div>
+      <div class="tl-body">Switch to teacher "Mr. Rajan" (blind, voice-first mode). Show he's logged in. Say: "He can't see the screen. He doesn't need to." Trigger a voice command: "Create a lesson on the digestive system for Grade 6." Show EduVoice responding with TTS: "I will create a lesson on the digestive system for Grade 6. Is that correct?" Say "Yes." Show lesson generated. "Zero keyboard interaction. The platform adapts to the teacher too."</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">2:15 – 3:00 · Student with Disability</div>
+      <div class="tl-title">Student Experiences Adaptive Content</div>
+      <div class="tl-body">Switch to student "Rahul" (dyslexia + stammer). Show his lesson in dyslexia font with word-by-word audio highlight. Show him submitting a voice answer in the practice module — deliberately pause mid-word. Show the heatmap feedback: words in green and red. Show feedback text: warm, encouraging, no mention of the stammer. "The AI knows Rahul stammers. It judges his knowledge, not his speech."</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">3:00 – 3:45 · Non-Verbal Student</div>
+      <div class="tl-title">AAC in the Live Classroom</div>
+      <div class="tl-body">Switch to student "Ananya" (non-verbal, AAC mode). Show the classroom is live. Show the AAC phrase grid. Click "I have a question." The app speaks it aloud. Teacher sees it in their sidebar. "Ananya just participated in her class. Without a word. Without being left behind."</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">3:45 – 4:30 · Analytics</div>
+      <div class="tl-title">Snowflake Inclusivity Dashboard</div>
+      <div class="tl-body">Switch to teacher dashboard → Analytics. Show chart: "Students using Dyslexia Font: avg grammar score 78. Students not using it: 67. A 12-point improvement." Say: "This is live Snowflake data. We JOIN structured scores with unstructured accessibility JSON. The teacher can now prove what's working."</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">4:30 – 5:00 · Close</div>
+      <div class="tl-title">The Close</div>
+      <div class="tl-body">"EduVoice doesn't just make content accessible. It makes the whole classroom inclusive — for the student who can't see, for the student who can't speak, for the student who processes the world differently. And for the teacher who wants to reach all of them, without working 8 extra hours to do it."</div>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <span class="callout-icon">✅</span>
+    <div><strong>Sponsor Checklist for Judges:</strong> Gemini (lesson generation + stammer analysis + voice commands + equitable evaluation), ElevenLabs (lesson audio + AAC speaking + spoken feedback), Snowflake (all data + VARIANT analytics + accessibility impact query), Auth0 (all login + role routing), DigitalOcean (API hosting + audio storage). All 5 sponsors in the critical path.</div>
+  </div>
+</div>
+</section>
+
+<footer>
+  EduVoice · Inclusive Classroom Platform · Complete Feature & Flow Guide<br/>
+  Gemini · ElevenLabs · Snowflake · Auth0 · DigitalOcean
+</footer>
+
+</body>
+</html>
