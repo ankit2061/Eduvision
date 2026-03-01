@@ -461,7 +461,7 @@ export function useCreateTest() {
     return useMutation<{ status: string; test_id: string }, Error, CreateTestPayload>({
         mutationFn: async (payload) => {
             const token = await getToken();
-            return apiFetch("/test/", token, {
+            return apiFetch("/test", token, {
                 method: "POST",
                 body: JSON.stringify(payload)
             });

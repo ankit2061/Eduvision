@@ -19,8 +19,8 @@ interface AuthContextType {
     isLoading: boolean;
     user: AuthUser | null;
     token: string | null;
-    login: (email: string, password: string) => Promise<void>;
-    register: (name: string, email: string, password: string, role: string) => Promise<void>;
+    login: (email: string, password: string) => Promise<AuthUser>;
+    register: (name: string, email: string, password: string, role: string) => Promise<AuthUser>;
     logout: () => void;
     getToken: () => string | null;
 }
@@ -30,8 +30,8 @@ const AuthContext = createContext<AuthContextType>({
     isLoading: true,
     user: null,
     token: null,
-    login: async () => { },
-    register: async () => { },
+    login: async () => ({ user_id: "", name: "", email: "", role: "" }),
+    register: async () => ({ user_id: "", name: "", email: "", role: "" }),
     logout: () => { },
     getToken: () => null,
 });
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
     }, []);
 
-    const login = useCallback(async (email: string, password: string) => {
+    const login = useCallback(async (email: string, password: string): Promise<AuthUser> => {
         const res = await fetch(`${BASE_URL}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -76,9 +76,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(data.user);
         localStorage.setItem("eduvision_token", data.access_token);
         localStorage.setItem("eduvision_user", JSON.stringify(data.user));
+        return data.user;
     }, []);
 
-    const register = useCallback(async (name: string, email: string, password: string, role: string) => {
+    const register = useCallback(async (name: string, email: string, password: string, role: string): Promise<AuthUser> => {
         const res = await fetch(`${BASE_URL}/auth/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -95,6 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(data.user);
         localStorage.setItem("eduvision_token", data.access_token);
         localStorage.setItem("eduvision_user", JSON.stringify(data.user));
+        return data.user;
     }, []);
 
     const logout = useCallback(() => {

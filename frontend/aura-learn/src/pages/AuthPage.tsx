@@ -28,22 +28,19 @@ export default function AuthPage() {
         setLoading(true);
 
         try {
+            let loggedInUser;
             if (mode === "signup") {
                 if (!name.trim()) {
                     setError("Please enter your full name");
                     setLoading(false);
                     return;
                 }
-                await register(name.trim(), email.trim(), password, role);
+                loggedInUser = await register(name.trim(), email.trim(), password, role);
             } else {
-                await login(email.trim(), password);
+                loggedInUser = await login(email.trim(), password);
             }
-            // Navigate based on role after successful auth
-            const savedUser = localStorage.getItem("eduvision_user");
-            if (savedUser) {
-                const u = JSON.parse(savedUser);
-                navigate(u.role === "teacher" ? "/teacher" : "/student");
-            }
+            // Navigate based on the role returned from the backend
+            navigate(loggedInUser.role === "teacher" ? "/teacher" : "/student");
         } catch (err: any) {
             setError(err.message || "Something went wrong");
         } finally {
