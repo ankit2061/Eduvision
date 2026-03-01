@@ -220,7 +220,7 @@ class SignToTextResponse(BaseModel):
 
 
 class AacSpeakRequest(BaseModel):
-    text: str = Field(..., max_length=500)
+    text: str = Field(..., max_length=5000)
     voice_id: Optional[str] = None
 
 

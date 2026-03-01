@@ -122,3 +122,46 @@ async def stt(audio_bytes: bytes, mime_type: str = "audio/webm") -> str:
         transcript = result.get("text", "").strip()
         logger.info(f"[ElevenLabs] Transcript: {transcript[:100]}...")
         return transcript
+
+async def s2s(audio_bytes: bytes, mime_type: str = "audio/webm", voice_id: str | None = None) -> bytes:
+    """
+    Transforms speech using ElevenLabs Speech-to-Speech API.
+    Returns MP3 bytes.
+    """
+    vid = voice_id or settings.elevenlabs_default_voice_id
+    logger.info(f"[ElevenLabs] S2S: voice={vid}, input_size={len(audio_bytes)}")
+    
+    url = f"{_BASE_URL}/speech-to-speech/{vid}"
+    
+    extension = mime_type.split("/")[-1] if "/" in mime_type else "webm"
+    if "webm" in mime_type:
+        extension = "webm"
+    elif "wav" in mime_type:
+        extension = "wav"
+    elif "mpeg" in mime_type or "mp3" in mime_type:
+        extension = "mp3"
+        
+    filename = f"audio.{extension}"
+    
+    files = {
+        "audio": (filename, audio_bytes, mime_type)
+    }
+    
+    data = {
+        "model_id": "eleven_english_sts_v2",
+        "voice_settings": '{"stability": 0.5, "similarity_boost": 0.8}'
+    }
+
+    async with httpx.AsyncClient(timeout=60.0) as client:
+        headers = {
+            "xi-api-key": settings.elevenlabs_api_key,
+            "Accept": "audio/mpeg"
+        }
+        resp = await client.post(url, headers=headers, files=files, data=data)
+        
+        if resp.status_code != 200:
+            logger.error(f"[ElevenLabs] S2S error {resp.status_code}: {resp.text[:200]}")
+            resp.raise_for_status()
+            
+        return resp.content
+

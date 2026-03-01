@@ -196,30 +196,82 @@ async def list_lessons_by_teacher(teacher_id: str) -> list:
         for r in (rows or [])
     ]
 
+# ─── Tests ────────────────────────────────────────────────────────────
+
+async def create_test(
+    test_id: str,
+    teacher_id: str,
+    title: str,
+    topic: str,
+    grade: str,
+    time_limit: int,
+    questions: list
+):
+    sql = """
+        INSERT INTO tests (test_id, teacher_id, title, topic, grade, time_limit, questions, created_at)
+        VALUES (%s, %s, %s, %s, %s, %s, PARSE_JSON(%s), CURRENT_TIMESTAMP)
+    """
+    await execute(sql, (test_id, teacher_id, title, topic, grade, time_limit, json.dumps(questions)))
+    logger.info(f"[Snowflake] create_test: {test_id}")
+    return test_id
+
+
+async def get_test(test_id: str) -> Optional[dict]:
+    rows = await execute(
+        "SELECT test_id, teacher_id, title, topic, grade, time_limit, questions, created_at FROM tests WHERE test_id = %s",
+        (test_id,),
+        fetch=True,
+    )
+    if not rows:
+        return None
+    r = rows[0]
+    
+    q_data = r[6]
+    if isinstance(q_data, str):
+        try:
+            q_data = json.loads(q_data)
+        except json.JSONDecodeError:
+            pass
+            
+    return {
+        "test_id": r[0],
+        "teacher_id": r[1],
+        "title": r[2],
+        "topic": r[3],
+        "grade": r[4],
+        "time_limit": r[5],
+        "questions": q_data,
+        "created_at": str(r[7]) if r[7] else None
+    }
+
 
 # ─── Assignments ────────────────────────────────────────────────────────────
 
 async def create_assignment(
     assignment_id: str,
-    lesson_id: str,
     teacher_id: str,
     assigned_to: str,
-    due_date: Optional[str] = None
+    lesson_id: Optional[str] = None,
+    test_id: Optional[str] = None,
+    due_date: Optional[str] = None,
+    assignment_type: str = 'lesson'
 ) -> str:
     sql = """
-        INSERT INTO assignments (assignment_id, lesson_id, teacher_id, assigned_to, due_date, status, created_at)
-        VALUES (%s, %s, %s, %s, %s, 'pending', CURRENT_TIMESTAMP)
+        INSERT INTO assignments (assignment_id, lesson_id, test_id, type, teacher_id, assigned_to, due_date, status, created_at)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, 'pending', CURRENT_TIMESTAMP)
     """
-    await execute(sql, (assignment_id, lesson_id, teacher_id, assigned_to, due_date))
-    logger.info(f"[Snowflake] create_assignment: {assignment_id}")
+    await execute(sql, (assignment_id, lesson_id, test_id, assignment_type, teacher_id, assigned_to, due_date))
+    logger.info(f"[Snowflake] create_assignment: {assignment_id} (type: {assignment_type})")
     return assignment_id
 
 
 async def get_student_assignments(assigned_to: str) -> list:
+    # We use LEFT JOINs to fetch either lesson or test info depending on the type
     sql = """
-        SELECT a.assignment_id, a.lesson_id, a.teacher_id, a.assigned_to, a.due_date, a.status, a.created_at, l.topic, l.grade
+        SELECT a.assignment_id, a.lesson_id, a.test_id, a.type, a.teacher_id, a.assigned_to, a.due_date, a.status, a.created_at, l.topic, l.grade, t.topic as test_topic, t.grade as test_grade, t.title as test_title
         FROM assignments a
-        JOIN lessons l ON a.lesson_id = l.lesson_id
+        LEFT JOIN lessons l ON a.lesson_id = l.lesson_id
+        LEFT JOIN tests t ON a.test_id = t.test_id
         WHERE a.assigned_to = %s OR a.assigned_to = 'class'
         ORDER BY a.created_at DESC
     """
@@ -228,16 +280,31 @@ async def get_student_assignments(assigned_to: str) -> list:
         {
             "assignment_id": r[0],
             "lesson_id": r[1],
-            "teacher_id": r[2],
-            "assigned_to": r[3],
-            "due_date": r[4],
-            "status": r[5],
-            "created_at": str(r[6]),
-            "topic": r[7],
-            "grade": r[8]
+            "test_id": r[2],
+            "type": r[3] or 'lesson',
+            "teacher_id": r[4],
+            "assigned_to": r[5],
+            "due_date": r[6],
+            "status": r[7],
+            "created_at": str(r[8]),
+            "topic": r[9] if r[3] == 'lesson' else r[11],
+            "grade": r[10] if r[3] == 'lesson' else r[12],
+            "title": r[13] if r[3] == 'test' else None
         }
         for r in (rows or [])
     ]
+
+
+async def submit_assignment(assignment_id: str, student_response: Optional[str] = None, raw_score: Optional[float] = None):
+    sql = """
+        UPDATE assignments
+        SET status = 'submitted',
+            student_response = COALESCE(%s, student_response),
+            raw_score = COALESCE(%s, raw_score)
+        WHERE assignment_id = %s
+    """
+    await execute(sql, (student_response, raw_score, assignment_id))
+    logger.info(f"[Snowflake] submit_assignment: {assignment_id} (score={raw_score})")
 
 
 # ─── Lesson Assets ────────────────────────────────────────────────────────────
