@@ -4,7 +4,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 from typing import Optional
 from app.dependencies import get_current_user
-from app.models.schemas import CurrentUser, UserProfileResponse, AccessibilityProfile, OnboardingRequest, SubRole
+from app.models.schemas import (
+    CurrentUser, UserProfileResponse, AccessibilityProfile, OnboardingRequest, SubRole,
+    DisabilityType, LearningStyle, ProfileUpdateRequest
+)
 from app.services import snowflake_db
 from app.services.local_auth import register_user, login_user, create_access_token
 
@@ -135,3 +138,34 @@ async def complete_onboarding(payload: OnboardingRequest, user: CurrentUser = De
     )
     
     return {"status": "onboarding_complete"}
+
+
+@router.post("/profile/update")
+async def update_profile(payload: ProfileUpdateRequest, user: CurrentUser = Depends(get_current_user)):
+    """Update user profile details."""
+    db_user = await snowflake_db.get_user(user.user_id)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found in database")
+    
+    # Merge existing data with updates
+    updated_name = payload.name if payload.name is not None else db_user.get("name")
+    updated_disability = payload.disability_type.value if payload.disability_type is not None else db_user.get("disability_type")
+    updated_learning = payload.learning_style.value if payload.learning_style is not None else db_user.get("learning_style")
+    
+    existing_prefs = db_user.get("accessibility_profile_json") or {}
+    updated_prefs = payload.accessibility_preferences.model_dump() if payload.accessibility_preferences else existing_prefs
+
+    await snowflake_db.upsert_user(
+        user_id=user.user_id,
+        role=user.role,
+        school_id=db_user.get("school_id"),
+        sub_role=db_user.get("sub_role"),
+        onboarding_complete=db_user.get("onboarding_complete", True),
+        name=updated_name,
+        email=db_user.get("email"),
+        disability_type=updated_disability,
+        learning_style=updated_learning,
+        accessibility_profile=updated_prefs
+    )
+    
+    return {"status": "success", "message": "Profile updated"}

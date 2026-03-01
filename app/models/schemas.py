@@ -82,6 +82,13 @@ class OnboardingRequest(BaseModel):
     accessibility_preferences: Optional[AccessibilityProfile] = None
 
 
+class ProfileUpdateRequest(BaseModel):
+    name: Optional[str] = None
+    disability_type: Optional[DisabilityType] = None
+    learning_style: Optional[LearningStyle] = None
+    accessibility_preferences: Optional[AccessibilityProfile] = None
+
+
 # ─── Lesson ───────────────────────────────────────────────────────────────────
 
 class LessonGenerateRequest(BaseModel):
@@ -194,6 +201,22 @@ class ClassInsights(BaseModel):
     common_errors: List[str] = []
     improvement_trend: Optional[str]  # "improving" | "stable" | "declining"
     accessibility_usage: Dict[str, int] = {}
+
+
+class StudentStatsResponse(BaseModel):
+    total_sessions: int
+    avg_fluency: float
+    streak_days: int
+    badges_earned: int
+    total_badges: int
+    fluency_trend: str
+    sessions_trend: str
+    streak_trend: str
+    badges_trend: str
+    xp: int
+    level: int
+    xp_progress: float
+    activity_data: List[Dict[str, Any]]
 
 
 # ─── Sign Language & AAC ──────────────────────────────────────────────────────

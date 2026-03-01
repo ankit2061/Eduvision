@@ -476,3 +476,120 @@ async def log_event(user_id: str, event_type: str, payload: dict):
     """
     await execute(sql, (event_id, user_id, event_type, json.dumps(payload or {})))
     logger.debug(f"[Snowflake] log_event: {event_type} for user={user_id}")
+
+
+async def get_student_stats(user_id: str) -> dict:
+    """Calculate realistic student stats and gamification progress."""
+    try:
+        # 1. Total Sessions & Trend (+X in last 7 days)
+        sql_sessions = """
+            SELECT 
+                COUNT(*) as total,
+                COUNT(CASE WHEN started_at >= DATEADD(day, -7, CURRENT_TIMESTAMP()) THEN 1 END) as recent
+            FROM practice_sessions 
+            WHERE student_id = %s
+        """
+        session_rows = await execute(sql_sessions, (user_id,), fetch=True)
+        total_sessions = session_rows[0][0] or 0
+        recent_sessions = session_rows[0][1] or 0
+        
+        # 2. Avg Fluency & Trend
+        sql_fluency = """
+            SELECT 
+                AVG(pa.scores_json:fluency::FLOAT) as avg_f,
+                AVG(CASE WHEN ps.started_at >= DATEADD(day, -7, CURRENT_TIMESTAMP()) THEN pa.scores_json:fluency::FLOAT END) as recent_f
+            FROM practice_artifacts pa
+            JOIN practice_sessions ps ON pa.session_id = ps.session_id
+            WHERE ps.student_id = %s
+        """
+        fluency_rows = await execute(sql_fluency, (user_id,), fetch=True)
+        avg_fluency = round(float(fluency_rows[0][0]), 2) if fluency_rows[0][0] is not None else 0.0
+        recent_fluency = round(float(fluency_rows[0][1]), 2) if fluency_rows[0][1] is not None else 0.0
+        
+        f_diff = avg_fluency - recent_fluency # Simplistic trend
+        f_trend = f"{'+' if f_diff >= 0 else ''}{round(f_diff, 1)}%" if recent_fluency > 0 else "New!"
+
+        # 3. Streak (consecutive days)
+        sql_streak = """
+            WITH RECURSIVE Dates AS (
+                SELECT DISTINCT CAST(started_at AS DATE) as d
+                FROM practice_sessions 
+                WHERE student_id = %s
+            ),
+            Consecutive AS (
+                SELECT d, 1 as streak
+                FROM Dates
+                WHERE d >= DATEADD(day, -1, CURRENT_DATE())
+                
+                UNION ALL
+                
+                SELECT d1.d, c.streak + 1
+                FROM Dates d1
+                JOIN Consecutive c ON d1.d = DATEADD(day, -1, c.d)
+            )
+            SELECT MAX(streak) FROM Consecutive
+        """
+        streak_rows = await execute(sql_streak, (user_id,), fetch=True)
+        streak_days = streak_rows[0][0] or 0
+
+        # 4. Badges (Rules-based)
+        badges = []
+        if total_sessions >= 1: badges.append("First Step")
+        if total_sessions >= 10: badges.append("Consistent")
+        if avg_fluency >= 8.0 and total_sessions >= 5: badges.append("Fluency Ace")
+        if streak_days >= 7: badges.append("Week Warrior")
+        
+        # Check for submitted tests/assignments for more badges
+        sql_submitted = "SELECT COUNT(*) FROM assignments WHERE assigned_to = %s AND status = 'submitted'"
+        submit_rows = await execute(sql_submitted, (user_id,), fetch=True)
+        if (submit_rows[0][0] or 0) >= 5: badges.append("Quiz Master")
+
+        # 5. XP & Level
+        xp = (total_sessions * 100) + (submit_rows[0][0] or 0) * 200
+        level = (xp // 1000) + 1
+        xp_progress = (xp % 1000) / 10 # 0-100 percentage for the current level
+
+        # 6. Activity Map (Last 90 days of engagement)
+        sql_activity = """
+            SELECT 
+                TO_CHAR(CAST(day AS DATE), 'YYYY-MM-DD') as activity_date,
+                COUNT(*) as activity_count
+            FROM (
+                SELECT started_at as day FROM practice_sessions WHERE student_id = %s
+                UNION ALL
+                SELECT ts as day FROM events WHERE user_id = %s AND event_type = 'assignment_submitted'
+            )
+            WHERE day >= DATEADD(day, -90, CURRENT_DATE())
+            GROUP BY 1
+            ORDER BY 1 ASC
+        """
+        # Note: events table might be empty if logging is disabled, UNION ALL stays safe
+        activity_rows = await execute(sql_activity, (user_id, user_id), fetch=True)
+        activity_data = [{"date": r[0], "count": r[1]} for r in (activity_rows or [])]
+
+        return {
+            "total_sessions": total_sessions,
+            "avg_fluency": avg_fluency,
+            "streak_days": streak_days,
+            "badges_earned": len(badges),
+            "total_badges": 10,
+            "fluency_trend": f_trend,
+            "sessions_trend": f"+{recent_sessions}",
+            "streak_trend": "Best!" if streak_days > 5 else "Keep going!",
+            "badges_trend": f"+{len(badges)}" if len(badges) > 0 else "0",
+            "xp": xp,
+            "level": level,
+            "xp_progress": xp_progress,
+            "activity_data": activity_data
+        }
+    except Exception as e:
+        logger.error(f"[Snowflake] get_student_stats error: {e}")
+        # Return realistic defaults instead of crashing
+        return {
+            "total_sessions": 0, "avg_fluency": 0.0, "streak_days": 0,
+            "badges_earned": 0, "total_badges": 10,
+            "fluency_trend": "0%", "sessions_trend": "+0",
+            "streak_trend": "New!", "badges_trend": "+0",
+            "xp": 0, "level": 1, "xp_progress": 0.0,
+            "activity_data": []
+        }
