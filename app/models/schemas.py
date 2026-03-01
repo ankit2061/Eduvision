@@ -128,6 +128,10 @@ class LessonUpdateRequest(BaseModel):
     content_json: dict
 
 
+class AssignmentSubmitRequest(BaseModel):
+    student_response: Optional[str] = None
+
+
 # ─── Practice ─────────────────────────────────────────────────────────────────
 
 class SessionStartRequest(BaseModel):

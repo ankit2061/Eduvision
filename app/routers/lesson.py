@@ -19,6 +19,7 @@ from app.models.schemas import (
     LessonAssignRequest,
     LessonSummary,
     LessonUpdateRequest,
+    AssignmentSubmitRequest,
 )
 from app.services import gemini, elevenlabs, snowflake_db, storage, learning_pathway, disability_pathway
 from app.utils.audio import detect_mime_type
@@ -410,11 +411,13 @@ async def assign_lesson(
 @router.post("/{assignment_id}/submit")
 async def submit_student_assignment(
     assignment_id: str,
+    req: Optional[AssignmentSubmitRequest] = None,
     user: CurrentUser = Depends(get_current_user),
 ):
     """Mark an assignment as submitted by the student (standard path)."""
     try:
-        await snowflake_db.submit_assignment(assignment_id)
+        student_response = req.student_response if req else None
+        await snowflake_db.submit_assignment(assignment_id, student_response=student_response)
         return {"status": "success", "assignment_id": assignment_id}
     except Exception as e:
         logger.error(f"[Lesson] Submit assignment error: {e}")
